@@ -62,35 +62,35 @@
         * It **rotates** along the X, Y and Z axis    
         * To detect rotation a simple sensor called IMU (Inertial Measurement Unit) is used
             * Combines the information from an accelerometer, magnetometer and gyroscope. Basically it is using gravity and the earth magnetic field to constantly infer where it is pointing.
-            * ![IMU](/images/IMU.JPG)
+            * ![IMU](/images/IMU.jpg)
         * This can either come from the phone of the headset it self
     * 6 DOF
         * Can also be tracked when it **moves along** the X, Y and Z axis  
         * That means you are tracker around the room, and not only statically in the same position
         * Position tracking mostly uses Optic technics 
-        * ![6dof](./images/6dof.JPG)
+        * ![6dof](./images/6dof.jpg)
         * Oculus Rift 
-            * ![oculus](./images/oculus.JPG)
+            * ![oculus](./images/oculus.jpg)
             * Uses a tracking system called **Constellation**
             * The headset contains a great number of infra red LEDs. Each LED is blinking super fast in a specific pattern 
-                * ![oculus-pattern](./images/oculus-pattern.JPG)
+                * ![oculus-pattern](./images/oculus-pattern.jpg)
             * Also has a separate camera that you place in your desk. The camera captures the light patterns and a computer program builds up a model of the light positions
-                * ![camera-oculus](./images/camera-oculus.JPG)
+                * ![camera-oculus](./images/camera-oculus.jpg)
                 * That then tries to fit a 3D model of the rift onto the 2d model of the camera
-                    * * ![oculus-tracking](./images/oculus-tracking.JPG)
+                    * * ![oculus-tracking](./images/oculus-tracking.jpg)
                 * Based on this 3d model, and measurements from an internal IMU it calculates your head position
                 * This model is cheap and has decent results, and that is why Oculus is doing it
         * HTC Vive (HTC + Valve)
-            * ![htc-vive](./images/htc-vive.JPG)
+            * ![htc-vive](./images/htc-vive.jpg)
             * Uses a tracking system called **Light House**
             * Unlike the Oculus Rift, it uses infra red laser
                 * It works by measuring the time it takes for a laser to swipe horizontally and vertically across a fast photo sensor.
-                * ![htc-sensor](./images/htc-sensor1.JPG)
-                * ![htc-sensor](./images/htc-sensor2.JPG)
+                * ![htc-sensor](./images/htc-sensor1.jpg)
+                * ![htc-sensor](./images/htc-sensor2.jpg)
                     * It is a similar principal to how ships navigates using time measurements between light house flashes (hence the name light house)
-                * ![htc-headset-sensor](./images/htc-headset-sensor.JPG)
+                * ![htc-headset-sensor](./images/htc-headset-sensor.jpg)
                     *  Both the Vive head set and controllers are covered with little circular indentions for the photo sensors
-                * ![htc-base-station](./images/htc-base-station.JPG)
+                * ![htc-base-station](./images/htc-base-station.jpg)
                     * A Vive base station is constantly swiping the room with a laser that hits the photo sensors. The swipe times are used to determine their positions in space. It uses this data and combines with readings from a embedded IMU to determine where your head and hands are located
 
 * Mobile vs Desktop VR
