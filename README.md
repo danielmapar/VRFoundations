@@ -62,7 +62,7 @@
         * It **rotates** along the X, Y and Z axis    
         * To detect rotation a simple sensor called IMU (Inertial Measurement Unit) is used
             * Combines the information from an accelerometer, magnetometer and gyroscope. Basically it is using gravity and the earth magnetic field to constantly infer where it is pointing.
-            * ![IMU](/images/IMU.jpg)
+            * ![IMU](/images/IMU.JPG)
         * This can either come from the phone of the headset it self
     * 6 DOF
         * Can also be tracked when it **moves along** the X, Y and Z axis  
