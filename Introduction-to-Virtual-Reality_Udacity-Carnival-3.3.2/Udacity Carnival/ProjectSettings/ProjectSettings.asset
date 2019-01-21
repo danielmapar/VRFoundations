@@ -11,7 +11,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Udacity, Inc.
+  companyName: Daniel Parreira
   productName: Udacity Carnival
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -163,7 +163,7 @@ PlayerSettings:
     Android: com.udacity.udacitycarnival
     Standalone: com.Company.ProductName
     Tizen: com.udacity.p1
-    iOS: com.udacity.udacitycarnival
+    iOS: com.danielparreira.udacitycarnival
     tvOS: com.udacity.p1
   buildNumber:
     iOS: 0
@@ -485,6 +485,7 @@ PlayerSettings:
   switchAllowsVideoCapturing: 1
   switchAllowsRuntimeAddOnContentInstall: 0
   switchDataLossConfirmation: 0
+  switchUserAccountLockEnabled: 0
   switchSupportedNpadStyles: 3
   switchSocketConfigEnabled: 0
   switchTcpInitialSendBufferSize: 32
