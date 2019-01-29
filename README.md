@@ -190,4 +190,111 @@
     * [Unity Manual: The Inspector window](https://docs.unity3d.com/Manual/UsingTheInspector.html)
 * Extra notes based on Readings
     * **Gizmo** or **Scene Gizmo**: A graphic overlay associated with a `GameObject` in a `Scene`, and displayed in the `Scene View`. Built-in scene tools such as the move tool are Gizmos, and you can create custom Gizmos using textures or scripting. Some Gizmos are only drawn when the GameObject is selected, while other Gizmos are drawn by the Editor regardless of which GameObjects are selected
+
+## VR Scenes and Objects
+
+## Lesson 2: Game Objects
+
+* Primitives
+    * Cubes
+    * Spheres 
+    * Cylinders
+    * Cones 
+    * Planes
+
+* To create a primitive you click on `GameObject` -> `3D Object` on the top menu. 
+* ![primitives](./images/primitive.PNG) 
+
+* Unity does support importing 3D models from other application. However, it is not a 3D modelling/texturing/character rigging tool it self. This makes it way easier to learn 
+    * Rigging a 3D model creates a skeleton or a frame for that model. By rigging a 3D model you can make it move around and perform different actions. Otherwise, the model would be static and remain in the position that it was when the animator created it.
+    * Unity is a master at assembling 3D Scenes
+    * Maya, 3D Studio, Blender, etc..
+        * We will use those tools for 3D modeling
+
+* ![transforms](./images/transforms.PNG) 
+
+* Transform Hierarchie
+    * ![transform-hierarchie](./images/hierarchie.PNG)
+    * If you drag one `GameObject` inside another one, this will generate a unified transform. Whenever you change the scale, position or rotation of the parent object, all its chields will update
+
+    * Unity uses matrices to quickly process the parent/child transform hierarchies. This is a really good idea because matrix operations are extremely fast on modern computers.
+
+* Lesson Review
+
+    * What are VR scenes made of?
+        * Everything you see in a VR scene is made of something called meshes. Meshes are made of triangles which are made of points. We use triangles to represent 3D objects because it’s fast, easy, and computers are optimized for them.
+            * A polygon mesh is a collection of vertices, edges and faces that defines the shape of a polyhedral object in 3D computer graphics and solid modeling.
+        * Points / Vertices 
+        * Edges
+        * Connect the Points to the Edges using a straight line in order to generate a polygon / poly (triangles in the case of Unity)
+            * Polygons are 2-dimensional shapes. They are made of **straight lines**, and the shape is "closed" (all the lines connect up).
+        * Connect the Triangles and you will have a Mesh/Polygonal Mesh
+    * What are Primitives and how can I make some in Unity?
+        * **Primitives are very basic 3D meshes**. Some examples of them include cubes, planes, spheres, and cylinders. There are a couple of different ways to make a primitive object in Unity. One way is to go to GameObject > 3D Object and then select the object you wish to create.
+    * Does Unity support creating more complicated models?
+        * Unity focuses on rendering 3D scenes and does NOT support creating more complex models. You’d have to use a separate specialized program like Blender or Maya to create complex models. You can also get 3D models online (from a site like Poly) or through the Unity Asset store.
+    * How can I bring a 3D object into my scene?
+        * To get the model from your computer into Unity, you can go to Assets > Import New Asset and navigate to where the model is on your computer. Once the model is in your project. Drag the 3D object from the Project window into the hierarchy. Use the move tool arrows to position the object where you’d like it to be.
+    * What are transforms?
+        * Every `GameObject` in Unity has a Transform component. This is the component that tracks the object’s position, rotation, and scale. You can change the properties by changing the values in the Inspector or by using the move, rotate, or scale tools in the upper left corner of Unity.
+    * What are transform hierarchies and how can I create one?
+
+## Lesson 3: Materials
+
+* Materials are good for coloring, shading and texture
+
+* To create a `Material` navigate to the project folder, more specifically to the `Assets` folder.
+    * After that, click `Create` on the top left corner, and then select `Material`
+
+* This `Material` represents a **shader**
+    Shader: the production of appropriate levels of light, darkness, and color within an image
+    * `Albedo` parameter defines how light changes when it gets reflected by a surface
+        * Lets say white light hits my shirt and then is reflected blue. That is the `Albedo` of the shirt material
+        * The `Albedo` is the materials main color
+
+* `Textures` are images that get stretched around `Meshes`
+    * They are used to adjust color, transparency, depth, shininess, metalness, light emission and many more
+    * ![texture](./images/texture.PNG)
+
+* To create a `Shader` click `Create`->`Shader`->`Standard Surface Shader`
+    * We can change the `Albedo` property of the `Shader` to be always green: `o.Albedo = float3(0, 1, 0);`
+    * After that, we can create a new `Material` and apply the `Shader`
+    * ![shader](./images/shader.PNG)
+        * `float3(0, abs(sin(_Time.z)), 0);`
+            * `_Time.z`: number of seconds passed after you pressed play
+            * `sin`: will give us a number from -1 and 1
+            * `abs`: from 1 to 0
     
+    * Unity’s Standard Shader attempts to light objects in a physically accurate way. This technique is called **Physically-Based Rendering** or PBR for short. Instead of defining how an object looks in one lighting environment, you specify the properties of the object, for example, how metal or plastic it is.
+
+    * Then, the shader computes its shading based on those factors. In practice, this works incredibly well to produce realistic 3D objects across a variety of lighting conditions. The big problem is that it is often computationally expensive.
+
+    * For mobile VR, it is unlikely we will be able to hit our performance targets if we use the Standard Shader. So, we will be using simpler and less computationally expensive shaders for this course.
+
+    * A super fast shader is the `Mobile` -> `Unlit`, but it is not attractive
+        * Another option is to use `Mobile` -> `Diffuse`, it will look more like the standard shader
+            * This is much much faster compared to the `Standard Shader`
+        * ![shaders](./images/shaders.PNG)
+
+* Lesson Review
+
+    * What are materials?
+        * Materials are what we use to color and shade our objects. They consist of a shader and its settings. Without them, we wouldn’t be able to see objects in our scene at all!
+    
+    * How can I create and assign materials to an object?
+        * To create a material, go to the Project window and click Create > Material. There are a couple different ways you can assign a material to an object. Find the material in the Project window and click and drag the material onto an object in the Scene. Click on an object in the Hierarchy, so you can see the details in the inspector. Click and drag the material and drop it in the inspector.
+    
+    * What are textures and how can we assign them to an object.
+        * Textures are images that get stretched around meshes. They can adjust color, transparency, depth, shininess, metalness, light emission, etc. To assign a texture to an object, find the object’s material in the Project window and click on it, so you can see its properties in the Inspector window. Search for your image in the Project window. Click and drag the image into the small box to the left of the “Albedo” setting in the object’s material.
+
+    * What are shaders?
+        * Shaders are written in High Level Shader Language (HLSL). Shaders are essentially the code behind how an object is rendered.
+        
+        * For mobile VR, we’ll want to use simple shaders because the Standard Unity shaders will be too computationally expensive. To change the shader type of a material, click on the material in the Project window. In the Inspector, toward the top, you’ll see a dropdown for Shader.
+    
+    * What are some simple shaders?
+        * Mobile > Unlit (Supports Lightmap) - This super fast shader supports lightmaps, but doesn’t get any realtime lighting.
+        * Mobile > Diffuse - This is a fast shader, that does get some lighting information. The main difference between this shader and the standard shader, is that this one is much faster.
+    
+    * What makes up a model?
+        * Models are made up of materials, textures and meshes.
