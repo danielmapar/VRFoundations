@@ -403,3 +403,203 @@
     * Tip: If you’re still noticing a little jump when shifting between states, it’s likely due to the animation clips being of different lengths. To avoid that jump, make your animations the same length.
 
     * Note: This lesson didn’t show you how to change the animations with your own scripts. That will be included in an upcoming lesson.
+
+## Lesson 5: Cameras
+
+* To view a `Scene` in Unity we will use a `Camera` `Game Object`.
+* Whenever you create a new `Scene` in Unity, it will be populated with a `Main Camera`
+    * If you check the `Inspector` you should see a `Camera` component.
+    * `Clear Flags` are a property that indicates what the camera should render if, for a given pixel on our screen, the camera does not see a 3D object.
+        * Sort of a control for the background.
+        * `Skybox`: just the plain old sky
+            * You can replicate that by creating a `Material` and using a shader called `Skybox/Procedural`
+            * We can add a `Skybox` component to the `Game Object` and inject our brand new `Material` to it.
+            * ![skybox](./images/skybox.PNG) 
+    * `Clear Flags` options:
+        * `Solid Color`: Sets the background to a single color which we can change with the background property
+        * `Depth only` option is useful in cases where we have multiple cameras. For example, in shooting mixed reality footage
+            * ![mixed-reality](./images/mixed-reality.PNG) 
+            * In that scenario, we need one virtual camera to capture foreground content without any background.
+        * `Don't Clear`:  Never use this for VR. This mode uses the previous image from the previous frame as the background for the next image. Results in a very disorienting experience
+    * `Culling Mask`
+        * The culling mask property tells the camera which layers of the scene it should render in the image. A layer is simply a group that we can place any `Game Object` into.
+        * ![default-layer](./images/default-layer.PNG) 
+            * Whenever you create a `Game Object` that will be placed in the `Default` layer. We can create our own layers by clicking `Add layer`.
+        * ![culling-mask](./images/culling-mask.PNG)
+            * If we remove the `NinjaCube` layer from the list, the `Cube` won't be rendered in the Game View (but it will show in the Scene View).
+    * The next property on the camera is titled `Projection`. This refers to the way we capture 3D space and represent it on a 2D screen. Unity provides two options: `Perspective` and `Orthographic`.
+        * `Perspective` allows the camera to act similarly to a pinhole camera in which we take into account the fact that objects closer to the camera should appear larger, just like in real life.
+            * One of the key selling points of virtual reality is that it is a medium that allows us to appreciate the scale and depth of a scene. For that reason, we want to simulate the way we perceive depth in real-life, which is why we use perspective camera projection in VR.
+        * `Orthographic`, on the other hand, effectively renders objects based on their size and not based on how close they are.
+    * `Field of View` / `Size`
+        * This controls the vertical angle that the camera will capture with a perspective projection. Based on this value and the screen size, Unity will calculate the horizontal field of view. By default, Unity sets this field of view to 60 degrees.
+    * `Viewport Rect`: 
+        * Allows us to control where on the screen our camera image is rendered. Normally, a camera renders to the whole screen width. But with this property, we can assign what percentage of the screen to use. This will be very useful in creating a virtual reality camera system (two images at the same time / two cameras).
+    * `Clipping Planes`:
+        * Primarily used for efficiency purposes. Unity defines two planes in front of the camera called the near and far clipping planes. Anything in between those planes will be rendered and anything outside of it wont. This is an optimization called FRSs Num Calling, and the close the near and far places are to each other, the better performance you will achieve.
+    * Read more [here](https://docs.unity3d.com/Manual/class-Camera.html)
+    
+* ![how-we-view](./images/how-we-view.PNG) 
+    * For VR, we need to generate two slightly offset images, one for each eye. When viewed through an HMD (Head-mounted display), our brain is then able to magically fuse these images into a single perceived image through a process called stereopsis.
+        * Stereopsis is a term that is most often used to refer to the perception of depth and 3-dimensional structure obtained on the basis of visual information deriving from two eyes by individuals with normally developed binocular vision.
+    * In order to do that, we need 2 cameras in Unity (one for each eye)
+        * We need to offset the cameras based on the distance between the center of the two lenses on our HMD. This distance is called the lens separation distance or LSD for short. The LSD is tied very closely to the interpupillary distance or IPD, which is the physical distance between the centers of our eyes. IPD generally range anywhere from 52 to 78 millimeters.
+
+* There are amazing VR SDKs that are able to get a Unity Scene an enable it for VR.
+    * Google VR
+    * Steam VR
+    * Oculus 
+
+* You can create your own VR look and feel by creating two cameras and offsetting them with the LSD/2 value.
+    * ![vr-cameras](./images/cameras.PNG)
+
+* To work with head rotation, we will need to create a C# script and add this as a component of the camera `Game Object`
+    * ![csharp-rotation](./images/csharp-rotation.PNG) 
+        * `Start` will run as soon as your game starts
+        * `Update` will be called every single time a frame is rendered onto your VR headset. We will need to use both these methods to access the gyro, which is a sensor in our phones that tells us how our phone is oriented.
+    * ![csharp-rotation2](./images/csharp-rotation2.PNG) 
+        * It is important to note that the Google SDK actually uses all IMU sensors (gyro, compass, accelerometer) to determine the head tracking.
+
+* At this point, we now have a basic VR camera system that we can throw into any VR scene. However, if you look at your app versus a normal Google Cardboard app, you will notice that we have a lot of black space and the images for each eye are not perfect rectangles. 
+    * ![vr-image](./images/vr-image.PNG) 
+    * The reason for that is because Google is trying to combat two problems when you view a screen through a lens, which you do when you viewing VR.
+        * One of them is pin **cushion distortion** which bulges (dilates) the images we see through the lenses because they're curved 
+            * ![pincushion](./images/pincushion.PNG)
+        * Google solves this issue by using a technic called **barrel distortion** which warps (bent) images on the screen but results in the effects of push **cushion distortion** being negated when viewed through a headset.
+            * ![barrel-distortion](./images/barrel-distortion.PNG) 
+    * The second problem that arises from viewing a screen through a lens is **chromatic aberration**. This problem results in colors on the perimeter of the lens shifting out in a rainbow-like band, similar to how a prism breaks light into a rainbow. Just like **pin cushion distortion**, the colors on the edges of an image can be warped (bent) so that when viewed through a headset, the chromatic aberration is cancelled out.
+        * ![chromatic-aberration](./images/chromatic-aberration.PNG)
+        * ![negated-chromatic-aberration2](./images/chromatic-aberration2.PNG)
+    * That is how the image Google creates is different from the one that we just created in our simple system.
+
+* Enabling VR Support and Adding Cardboard SDK
+    * Assuming the [Google VR SDK](https://developers.google.com/vr/develop/unity/get-started-android) for Unity asset has been imported into your project, you can enable VR with just a few clicks!
+
+    * Note: The course assets for this lesson have GoogleVR Unity SDK included so there should be no need to download and import it into your Unity project.
+
+    * To enable VR, simply go to the Unity menu Edit > Project Settings > Player to open the Player Settings in the Inspector:
+        * ![enable-vr](./images/enable-vr.PNG)
+    * Next, under the XR Settings section for the platform you are targeting, i.e. iOS or Android:
+        1. Check the Virtual Reality Supported checkbox.
+        2. Click the plus symbol and add Cardboard.
+    
+    * Note: If there are other SDKs already added, you can delete them using the minus symbol.
+
+    * As long as you have a camera in your scene, your project now supports VR!
+
+* Drag & Drop for Added Functionality
+
+    *  One of the neat things about Google VR SDK for Unity is that it has a built-in tool that lets us simulate head rotation and tilt directly in the Unity Game view.
+
+    * To enable this, simply locate the GvrEditorEmulator prefab located in the Assets > GoogleVR > Prefabs folder, drag it into your scene and position it where you would like the camera located. Then make your camera a child of the GvrEditorEmulator in your scene hierachy and ensure the camera's transform is set to default values, i.e. Position and Rotation is 0, 0, 0 and Scale is 1, 1, 1:
+        * ![GvrEditorEmulator](./images/GvrEditorEmulator.PNG)
+    * Note: If you plan to move your camera during gameplay via code, make sure the camera is tagged MainCamera in the Inspector, as shown in the image above.
+    
+    * Now, once you enter Game mode, you can use the following controls:
+        * To simulate head rotation (rotate around Y axis): Alt + mouse movement.
+        * To simulate head tilt (rotate around Z axis): Ctrl + mouse movement.
+    
+    * Important! In general, the camera should always be nested under a parent gameobject, for example, the GvrEditorEmulator, and have a local position and rotation of 0, 0, 0. To reposition the camera, the parent gameobject should be repositioned and the camera itself should keep its local position and rotation of 0, 0, 0.
+
+* GoogleVR Related Changes affecting Course Assets and Starter Project 
+
+    * Since the videos in this course was recorded, there has been multiple updates to Google VR SDK for Unity. The main changes affecting this course are:
+        * The GvrViewerMain prefab you see in the Hierarchy during the videos no longer exist in Google VR SDK for Unity and is now represented by the GvrEditorEmulator prefab.
+        * The Main Camera you see in the Hierarchy during the videos will typically be nested as a child of the GvrEditorEmulator prefab.
+
+* Lesson Review
+
+    * What are cameras in Unity?
+        * Cameras are a tool in Unity to show the virtual world to our users. Positioning the camera allows us to control and influence what our players see.
+    
+    * What is the camera’s clear flags property?
+        * The clear flags property tells our camera what to render if it doesn’t see a 3d object.
+
+            * Skybox is the default setting. It shows what the world looks like around your 3d models. A skybox is another type of material and could be a cityscape, desert, or just the sky.
+
+            * Solid color sets the background to a single color.
+
+            * Depth only is used when there’s multiple cameras, like when creating mixed reality footage.
+
+            * Don’t clear is NEVER used for VR. It uses the image from the previous frame as the background for the next frame. It’s very disorienting in VR.
+    
+    * How can I create my own skybox?
+
+        * Create a new material. Change the Shader from Standard to Skybox > Procedural. If you wanted to add this skybox to a camera, you’d add a Skybox component to the camera. Then drag the new skybox material to the Skybox component.
+    
+    * What is the Culling Mask?
+
+        * The culling mask tells the camera which layers (or groups) of the scene it should render. It can be useful when we want to hide parts of our scene until we want them to be seen.
+    
+    * What’s the difference between Perspective and Orthographic cameras?
+
+        * Perspective cameras work just like real life. Closer objects appear larger, and objects further away appear smaller. This is the one we use for VR cameras.
+
+        * Orthographic cameras render objects based on their size and not how close they are. A pencil that’s really close to the camera would appear smaller than a tree that’s much further away.
+    
+    * What about the rest of the camera’s properties?
+
+        * Field of View controls the vertical angle that the camera will capture with a perspective projection. Based on that, Unity will calculate the horizontal angles. We typically don’t need to change this as the API we use for VR will typically handle this setting.
+
+        * Clipping Planes are two vertical planes is used to determine what gets rendered. Anything between those two planes will be rendered. The closer the two planes are, the better performance you’ll see. This is also known as frustum culling.
+
+        * Viewport Rect controls where on the scene our view is rendered. Normally a view is rendered to the whole screen width. We can change this if we wanted to change the percentage of the screen to use.
+
+    * Why does the images for each eye need to be slightly offset?
+        * Our brains go through a process called Stereopsis that will fuse the two images together to create a sense of depth. Lens separation distance (LSD) is the space between the two lenses in our hmd and it directly correlates to the offset in the two cameras that are needed to render VR and the physical distance between the centers of our eyes (interpupillary distance or IPD). IPD ranges from 52 - 78mm (average is 63mm).
+    
+    * How could we build our own VR camera system?
+
+        1. Create an empty gameobject and position it in your scene.
+        2. Create two cameras - one for the left eye and the other for the right eye. Drag both cameras on top of the empty game object. Reset their positions.
+
+        3. For the lft camera, set the viewport width to 0.5.
+        4. For the right camera, set the x coordinate of the viewport to be 0.5 and the width stay as 1.
+        5. Shift the left camera to the left by an amount that’s half of the LSD value in meters. For example, if our LSD was 64mm, we’d shift the camera 32mm or 0.32 in Unity. (Remember that one Unity unit is equal to 1 meter.)
+        6. Shift the right camera to the opposite. If our left camera was shifted to 0.32, like in our example, the right camera would move to -0.32.
+    
+    * What is the difference between the Start and Update methods?
+        * The start method is ran when an object is started up or created. The update method, however, is run each time a frame is rendered. For example, this could be as much as (or more than) 90 times per second for an Oculus Rift or HTC Vive or 60 times per second on a Google Cardboard headset.
+    
+    * How can we setup head tracking in our own VR system?
+        * Create a new script and add it to the parent object of our two cameras. In the start method, we’ll enable the gyrometer.
+
+        * ```csharp
+            void Start() {
+                Input.gyro.enabled = true;
+            }
+            ```
+        
+        * In our update method, we’ll use information from the gyrometer to adjust the cameras’ parent gameobject.
+
+        * ```csharp
+            void Update () {
+                // This line will get the rotation data from the gyrometer.
+                Quaternion att = Input.gyro.attitude;  
+                // This line will ensure that our gyrometer orientation lines up with our cameras’ parent’s orientation.
+                att = Quaternion.Euler(90f, 0f, 0f) * new Quaternion(att.x, att.y, -att.z, -att.w);
+                // Assign the converted rotation of the gyrometer to the camera’s parent orientation.
+                transform.rotation = att;
+            }
+            ```
+        
+    * How does Google Cardboard sdk differ from the simple VR system we created?
+
+        * Google’s sdk works to correct a couple of problem that occurs when you view a screen through a lense.
+
+        * The first is “Pincushion Distortion”, this is the distortion we see when images appear to be “bulging” away from our eyes. Google fixes this by applying “Barrel Distortion” which effectively makes the image appear to bulge toward our eyes instead. When the images that’s bulging toward our eyes are viewed through our lenses, the pincushion distortion comes into play and makes the image appear flatter and more normal.
+
+        * The second issue is “Chromatic Aberration”. This distorts the colors on the edge of the lens shifting out in a rainbow-like pattern. Google’s sdk warps the colors on these edges to cancel out the distortion when viewed through lenses.
+
+        * In the VR system we created, we used the gyrometer to implement head tracking. Google’s sdk uses information from the gyrometer, accelerometer and the compass to achieve smoother tracking.
+    
+    * How do we setup Google’s VR sdk in our Unity scenes?
+        * Once the sdk has been imported into Unity, it’s really quick to get it implemented for use in our scenes.
+    
+    * Project Setup - Once per project.
+        * Enable XR Settings by going to Edit > Project Settings > Player> XR Settings. Click the checkbox next to Virtual Reality Supported. Click the plus symbol and add Cardboard.
+    
+    * Scene Setup - Once per scene.
+        1. Add a GvrEditorEmulator to your scene. Place it where you’d want your camera to be located.
+        2. Make your camera a child of the GvrEditorEmulator. Reset the camera’s transform component. Be sure your camera is tagged as “MainCamera”. Add a GvrPointerPhysicsRaycaster component to the camera. This will enable the camera to interact with 3D objects in your scenes.
+        3. Add a GvrReticlePointer prefab as a child of your camera. This will give you the reticle (the little white dot) in the center of your camera. This is used to interact with things in your scene.
