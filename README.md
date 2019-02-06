@@ -513,7 +513,7 @@
         * Cameras are a tool in Unity to show the virtual world to our users. Positioning the camera allows us to control and influence what our players see.
     
     * What is the camera’s clear flags property?
-        * The clear flags property tells our camera what to render if it doesn’t see a 3d object.
+        * The `clear flags` property tells our camera what to render if it doesn’t see a 3d object.
 
             * Skybox is the default setting. It shows what the world looks like around your 3d models. A skybox is another type of material and could be a cityscape, desert, or just the sky.
 
@@ -552,8 +552,7 @@
 
         1. Create an empty gameobject and position it in your scene.
         2. Create two cameras - one for the left eye and the other for the right eye. Drag both cameras on top of the empty game object. Reset their positions.
-
-        3. For the lft camera, set the viewport width to 0.5.
+        3. For the left camera, set the viewport width to 0.5.
         4. For the right camera, set the x coordinate of the viewport to be 0.5 and the width stay as 1.
         5. Shift the left camera to the left by an amount that’s half of the LSD value in meters. For example, if our LSD was 64mm, we’d shift the camera 32mm or 0.32 in Unity. (Remember that one Unity unit is equal to 1 meter.)
         6. Shift the right camera to the opposite. If our left camera was shifted to 0.32, like in our example, the right camera would move to -0.32.
@@ -589,7 +588,7 @@
 
         * The first is “Pincushion Distortion”, this is the distortion we see when images appear to be “bulging” away from our eyes. Google fixes this by applying “Barrel Distortion” which effectively makes the image appear to bulge toward our eyes instead. When the images that’s bulging toward our eyes are viewed through our lenses, the pincushion distortion comes into play and makes the image appear flatter and more normal.
 
-        * The second issue is “Chromatic Aberration”. This distorts the colors on the edge of the lens shifting out in a rainbow-like pattern. Google’s sdk warps the colors on these edges to cancel out the distortion when viewed through lenses.
+        * The second issue is “Chromatic Aberration”. This distorts the colors on the edge of the lens shifting out in a rainbow-like pattern. Google’s sdk warps (bending) the colors on these edges to cancel out the distortion when viewed through lenses.
 
         * In the VR system we created, we used the gyrometer to implement head tracking. Google’s sdk uses information from the gyrometer, accelerometer and the compass to achieve smoother tracking.
     
@@ -603,3 +602,167 @@
         1. Add a GvrEditorEmulator to your scene. Place it where you’d want your camera to be located.
         2. Make your camera a child of the GvrEditorEmulator. Reset the camera’s transform component. Be sure your camera is tagged as “MainCamera”. Add a GvrPointerPhysicsRaycaster component to the camera. This will enable the camera to interact with 3D objects in your scenes.
         3. Add a GvrReticlePointer prefab as a child of your camera. This will give you the reticle (the little white dot) in the center of your camera. This is used to interact with things in your scene.
+
+## Lesson 6: Lights
+
+* ![lighting](./images/lighting.PNG)
+
+* Right click on the scene `Hierarchy`, the click `Light` -> `Directional Light`.
+    * You can think of a directional light as a light that come from a far away object, something like the sun.
+    * ![directional-light](./images/directional-light.PNG)
+    * As a result, no matter where we move our directional light, you will see that the lighting stays the same. However, if we rotate our light, you can see that the lightning in our apartment changes. You can think of this in the way that lighting from a sunset is different from a high noon.
+        * Both are coming from a distant object, in this case the sun, but the angle at which they hit our world is different, and that creates a different effect.
+
+* Lets click on the `Direction Light` `Game Object`. You will notice it has a `Light` component associated to it.
+    * Withing that component there is a option for `Type`.
+        * ![types-of-light](./images/types-of-light.PNG)
+        * Spot
+            * Like a point light a spotlight is dependent on its position but it is also dependent on its rotation.
+            * ![spot-light](./images/spot-light.PNG)
+            * It's equivalent use in the real world is like a light house, flashlight, or stage spotlight, which is where the name comes from.
+            * We can control its range as well as how wide the cone is by using `Spot Angle` and `Range`.
+        * Directional
+        * Point
+            * If we use this option you will notice the `Scene` will turn black. That is because a `directional` light, unlike a `point` light, emits light from its current position, just like a light bulb. 
+            * Just like a light bulb, a point light emits light in a sphere around it, which means the rotations don't affect it unlike a directional light.
+            * ![range-point-light](./images/range-point-light.PNG)
+            * If we change the `Range` from 10 to 100, you will notice the apartment will get much brighter. This is because Unity fades the light intensity as you travel further away from a point light. If we increase the range that fading slows down.
+        * Area (baked only)
+            * Unity pre-calculates the illumination from these Lights before run time, and does not include them in any run-time lighting calculations. This means that there is no run-time overhead for baked Lights.
+            * Know that an area like it will have to be baked, which means, we will need to do some computation before we run our experience in order to view this light.
+
+* Generic Light Properties
+    * `Color`: We can select any type of color we want. Picking a color adds a tint to our light, just like what you would see at a concert.
+    * `Intensity`: This property allows us to control how bright or intense our light is. We can bring down the intensity value to zero for zero effect or we can max it out its highest value, which is eight, to supersaturate our apartment.
+    * `Shadow`: To use them we first need to change our `Mode` to `Realtime`. Shadows are the real selling point about using light in Unity. Done properly, you can get some really nice effects like this.
+        * ![shadow-unity](./images/shadow-unity.PNG)
+    * However, on mobile we should be careful about shadows as they are very computationally expensive when done incorrectly. 
+    * To use shadows, you have three options. The first being no shadows which it defaults to. Second is hard shadows
+        * Second is `Hard Shadows`, which are shadows with sharp edges. These shadows dont exist in the real world, but there are a lot more performant than their counterpart, `Soft Shadow`
+        * `Soft Shadows` tend to look a lot more like shadows in the real world, but at runtime, they are a lot more impactful on performance. On mobile, we highly recommend not using shadows for realtime lights.
+
+* `Render Mode` is a property that let's us tell Unity how important are lights. For now, let's just leave it as auto. With auto, Unity automatically determines if this light is important to our scene. If a light is not important and Unity realizes the app isn't maintaining frame rate, it can then turn off that light to save on performance. Its is better to have higher FPS app than one that makes people sick.
+
+* `Culling Mask`: Choose which layers to render on. In a similar fashion, the culling masks let us choose which layers this light should effect. So, if we set our layer to nothing, our light basically does not even exist. Just like the camera, we can determine which objects can and cannot interact with the light.
+
+* Click [here](https://docs.unity3d.com/Manual/class-Light.html) for more on lights.
+
+* About `Baking`
+
+    * It is a method to compute advanced lighting effects like indirect light bounces and realistic shadows
+    * It allows us to create lightmap textures that can than be referenced at runtime, which is cheaper than calculating lighting at runtime
+    * It requires that our lights and any object we want to **bake are static in the scene**
+
+    * Since we now know that in order to bake lights for a game object it must be static, i.e. not move during gameplay, we should figure out how to tell Unity that a game object will not move.
+
+    * To do that, we first select the game object in the scene hierarchy. In this case, we have selected the Apartment game object. Now, if you look at the top right of the Inspector, you will see a checkbox named Static:
+        * ![static-game-object](./images/static-game-object.PNG)
+    
+    * This is the property Unity uses to determine whether a game object is static or not.
+
+    * As you can see, it is currently unchecked, so let’s enable it. When we do that, Unity asks if we want to apply this setting to all children. For this exercise, we don't need any of these child game objects to move, so let’s make them static as well by selecting the Yes, change children option:
+        * ![static-children](./images/static-children.PNG)
+    
+    * What we have actually done is enabled static not only for lighting but also for a lot of other properties. If we click the down arrow next to the Static checkbox, you will see that we can choose for which properties we want this game object to be static:
+        * ![static-options](./images/static-options.PNG)
+    
+    * For example, there may be cases where you know a game object will be static for lighting purposes but not necessarily for navigation. You will usually tackle those on a case-by-case basis, but in general, if you know a game object is never going to move, then you can mark it static for everything.
+
+    * Now, let’s move on to the lighting aspect. In case you didn't notice, we have actually already added in several area lights to the scene under the Lights game object. Feel free to tweak these as you desire.
+
+    * Let's begin baking those lights. To do that, we go to Window > Rendering > Lighting > Settings. Let’s dock that next to the Inspector, and then at the bottom, we hit Generate Lighting:
+
+    * Give it some time, as this is a fairly complex calculation that can take a few minutes. Once it is done, you will have have a nicely lit apartment!
+
+    * Tip: Moving game objects in your scenes should never be marked static. Non-moving game objects should always be static.
+
+* Lighting Modes
+
+    * We just saw how we can bake lights for our scene game objects, but how do we set up our lights to choose whether or not they are baked?
+
+    * On any light, except the Area Light, we have the option to set it's Mode. This mode property can be set to Realtime, Mixed, or Baked:
+
+    * ![light-modes](./images/light-modes.PNG)
+
+    * As you might imagine, if we have a light that is set to Realtime, it will not be baked. Likewise, if you set a light to be Baked, it will be baked but not have any realtime effects.
+
+    * Based on those two descriptions, you might be able to infer what Mixed mode is? In Mixed mode, Unity will both bake the light and use the light for realtime effects. The specific effects of the mixed light will vary depending on the Mixed Lighting Mode settings which we will discuss towards the end of this lesson.
+
+* Introducing the Lighting Panel
+
+    * In order to bake our scene we needed to open up the lighting window. This window allows us to control a lot of settings that will make our scene optimized and really come to life.
+
+    * At the top, it is divided into three tabs: Object, Scene, and Lightmaps.
+
+    * **First up, we have the scene tab**
+
+        * This tab really lets us control the settings of the light in our scene. It broken into 6 sections: Environment Lighting, Precomputer Realtime GI, Baked GI, General GI, Fog, and Other Settings. We will take a closer look at this tab over the next few videos.
+
+        * ![lighting-options](./images/lighting-options.PNG)
+
+    * Next up, we have global maps
+
+        * Once we bake a scene, we can come to this tab to check out what our light maps actually look like.
+
+        * ![baked-maps](./images/baked-maps.PNG)
+
+        * Here you can see the files and textures were actually created. It is pretty hard to glean information from the image, but this tab is useful for seeing how much data is being stored tuning your parameters to optimize the number or size of textures.
+    
+    * Last up, we have object maps
+
+        * In a similar fashion to the inspector, this tab allows us to look at the specific properties of a selected Game Object. By using the drop down, you are able to select from a variety of properties that would affect the lighting of our objects:
+
+            * Albedo
+            * Emissive
+            * Realtime Intensity
+            * Realtime Direction
+            * Realtime Charting
+            * Baked Intensity
+            * Baked Direction
+            * Baked Charting
+            * Baked Shadowmask
+
+        * ![object-lighting-options](./images/object-lighting-options.PNG)
+
+        * By default, the dropdown selects Albedo. Click on the Book_Shelf in the inspector. Then go to the Object maps tab and select Baked Charting.
+
+        * ![baked-charting](./images/baked-charting.PNG)
+
+        * When you do so, you will see the map that the Book_Shelf is in. An if you press 'F' while your mouse cursor is over the the map, you will zoom into the specific area that relates to the Book_Shelf. You can also use your Scroll Wheel to zoom in and out of the map.
+
+        * Next up, we will be diving A LOT deeper into the Scene view and how we can use it to optimize the lighting in our scene. But before moving on, feel free to explore other Game Objects and take a look at what their light maps look like. Now's a great time to appreciate the fact that Unity has this built in and you don't have to code it yourself :)
+    
+* Lighting from the Sky
+
+    * Now that we have a general overview of the Lighting window, let’s dive deep into Scene tab.
+
+    * Starting from the top, we have the Environment Lighting section.
+
+    * ![scene-lighting](./images/scene-lighting.PNG)
+
+    * Remember the Skybox from last lesson? In that lesson, we added a Skybox to a component on our Camera. But that resulted in us not being able to see our Skybox in the Scene view. If we want to see it in the scene view as the default Skybox for our Cameras, we can actually set a Skybox in this section. Let’s set the Skybox to the one we created last lesson by dragging and dropping it onto the tab.
+
+    * ![skybox-light](./images/skybox-light.PNG)
+
+    If you don't see a red tinted skybox in the Scene View, it may be because either you don't have a directional light in the scene OR the rotation of your directional light is incorrect. You can easily fix this by creating a directional light and rotating it.
+
+    * ![dir-light](./images/dir-light.gif) 
+        * Awesome, we have our Skybox set up properly!!
+
+    * Now, moving to the next property in the Lighting panel, we have Ambient light.
+
+        * Unlike any light we have discussed before, Ambient light is a light source that affects all objects in the scene at a fixed intensity and from all directions. Basically, think of it as a a 360 degree directional light. In the image below from the Unity documentation, the same objects are rendered except the left image has no lighting and the right has just ambient lighting.
+
+        * ![ambient-lighting](./images/ambient-lighting.PNG) 
+
+        * We can set Ambient Lighting to be sampled from the Skybox, a gradient, or a simple color. For the purposes of our apartment, we will be using a color. Once we select Color, we can then change the Ambient Color property. Since most of the lighting will come from our area lights, we will choose to set the Ambient color to black, which is the same as no ambient light.
+    
+    * The last core component of Environment Lighting is Reflections.
+
+        * In the real world, light bounces off a bunch of object, but calculating that in real-time is an expensive process. Unity has a system in place for calculating reflections for use with shiny objects and in the Environment tab allows us to specify how reflections are calculated from the sky. Since our apartment is indoors, we don’t want to be affected by the sky, and thus want to turn off Environment Reflections.
+
+        * To do that, simply make sure that our Reflection Source is set to Custom and its Cubemap is set to none.
+
+        * ![env-reflection](./images/env-reflection.PNG) 
+
+        * If you do make a scene that you want Reflections for, make sure to read [here for more information](https://unity3d.com/learn/tutorials/topics/graphics/reflections).
