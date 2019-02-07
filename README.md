@@ -766,3 +766,172 @@
         * ![env-reflection](./images/env-reflection.PNG) 
 
         * If you do make a scene that you want Reflections for, make sure to read [here for more information](https://unity3d.com/learn/tutorials/topics/graphics/reflections).
+
+* Global Illumination
+
+    * After the Environment section, we will start to dive deeper into the core of how we can optimize our lighting! These next 3 sections in the Scene tab fall under what Unity calls the Global Illumination.
+
+    * Global Illumination (GI) is Unity’s system to model complex lighting such as indirect light that bounces off nearby objects. It works really well with Unity’s Standard Default Material to really bring our scenes to life! These four sections are:
+
+        * Realtime Lighting
+        * Mixed Lighting
+        * Lightmapping Settings
+    
+    * They let us fully control the parameters Unity uses when it makes it calculations for pre-computed lighting.
+
+        * ![lighting-options2](./images/lighting-options2.PNG)
+    
+    * The first section is Realtime Lighting
+        * If you added real-time lights in your scene, you could use this section to enable precomputation of some lighting effects for static objects in your scene. If you enable Realtime Lighting, you will see that you will have the option to change the Ambient Mode in Environment Settings and the Indirect Resolution in the Lightmapping Settings.
+
+        * ![realtime-lighting](./images/realtime-lighting.gif)
+
+        * Basically, Precomputed Realtime GI calculates how light could bounce off a static object (indirect light) and can then use that information in realtime for moving objects when you start your application.
+
+        * Since we we don’t have any real time lights in our Apartment scene, we can leave our Realtime Lighting disabled.
+
+        * Next up, let’s talk about Mixed Lighting and Lightmapping Settings, so we can get the most performance from baking.
+    
+* Mastering Baking
+
+    * Let's talk a bit about Mixed Lighting!
+
+    * Much like the Realtime Lighting section, the Mixed section is pretty light with regards to options. We have the option to enable or disable Baked Global Illumination. If we enable Baked Global Illumination, we then can choose a Lighting Mode and a Realtime Shadow Color.
+
+        * ![lighting-shadow](./images/lighting-shadow.PNG)
+    
+    * Remember the Mixed Lighting Mode? This Lighting Mode property lets us specifically control how Mixed Lights behave once we bake them. There are 3 main modes:
+
+        * Subtractive
+        * Shadowmask
+        * Baked Indirect
+    
+    * Since we are not using mixed lights, we will be skipping this panel for now. But if you want more information on what each mode does, feel free to read the information boxes in the panel for each mode and also the [Unity documentation](https://docs.unity3d.com/Manual/LightMode-Mixed.html) on it.
+
+    * Just make sure you have Baked Global Illumination enabled, and let's continue onto the Lightmapping Settings.
+
+    * ![lightmapping](./images/lightmapping.PNG)
+
+    * Currently in Unity, there is support for two types of Lightmapping Algorithms:
+
+        * Enlighten
+        * Progressive
+    
+    * Enlighten was Unity's primary lighting system up until Unity 5.6. In that version, they added the Progressive Lightmapper.
+    
+    * Moving forward, Unity will be continuing to upgrade the Progressive Lightmapper as it offers some extra benefits such as eventually being able to run on the GPU and faster previewing of your scene.
+
+    * As such, we will be focusing on using the Progressive Lightmapper, so make sure you have that selected.
+
+        * You can use the "prioritize view" option to prioritize lightmapping some areas of your scene over others based on where you are looking in your scene. However if you do not care about this, it is best to turn that off.
+
+        * You also have several settings that control the the fidelity of your light mapping process, specifically:
+
+            * Direct Samples
+            * Indirect Samples
+            * Bounces
+            * Filtering
+
+        * The way Light Mapping works at a high level is that for each light, you will be shooting rays of light in various directions depending on the type of light. If these rays hit an object, we then calculate how the light should look at that position based on the object and its material. If we want to simulate indirect light, we can then have a ray "bounce" off that object and continue the same process. All those settings above control how many rays (samples) are produced and how much they bounce. So the higher the values, the higher quality you will get but the longer it will take to lightmap.
+
+    * Lightmap Texture Properties
+
+        * After the Lightmapper specific settings, we will see that we have a few settings for the resolution of your light maps. We want to set this value high enough so that the resolution of our lighting is good, but not too high that we run into performance issues. Let’s set the Lightmap Resolution to 20.
+
+        * The next property is the Padding, which is the separation between all the baked calculations we do for every object. Currently, it is set 2. If you go the lightmaps tab, and look very closely you might be able to see some small spacing in between each images. In general, we want to keep the spacing small so as to take up less space, which again is really important on mobile for efficiency. In general you would only want to change this to be higher if you want to move the optimize where certain objects are in your lightmap. Let’s go ahead and set it back down to 2.
+
+        * We also have Ambient Occlusion, which is a property that lets us control how ambient light bounces off and gets occluded by static meshes. The property becomes most apparent near the intersection of meshes like the wall of our apartment.
+
+        * ![occlusion](./images/occlusion.PNG)
+
+        * To really see the effect, try increasing the Max Distance property to 10 and see if there is a difference. Reminder, you will need to re-generate your lightmaps.
+
+        * The last property to discuss is the Atlas Size. This property lets us control the actual size of the light map texture. If we look at the choices, you will notice that they are all powers of 2 and this is purely so that Unity can perform some optimizations when it uses the Atlas. If this value is too small, it will result in creating many small light map textures, which is not optimal. Too big, and we will be wasting space in our map.
+
+        * ![atlas](./images/atlas.gif)
+
+        * Just to see what happens, try setting the Atlas size to 128 to and see how many lightmaps are created in the Global Maps tab.
+
+        * It just so happens that 1024 is the smallest size that captures all our lighting data into one texture, so set it back to 1024 and bake it again.
+
+        * And that covers the lighting panel! There is a lot more we could talk about, but we have cover all we need in this panel to make our lights amazing. We only have one more window we need to look at to up the quality of our lights!
+
+* Bringing it Home with Some Quality
+
+    * `Edit` -> `Project Settings` -> `Quality`
+
+    * Leave a single setting for Mobile
+        * Pixel Count set to `0`
+            * How many real time lights it should consider for each given pixel
+            * No real time lights in our scene
+        * Texture Quality set to `Full Rec`
+        * Anti Aliasing is set to `2x`
+        * `Disable Shadows` will only disable realtime shadows, but it will keep our baked shadows.
+
+* Lesson Review
+
+    * What are the difference between the light types?
+
+        * Directional lights are lights that simulate the sun. Moving a directional light doesn’t change how things are lit in the scene. However, rotating the light does change things a bit. It can simulate a setting or rising sun, for example.
+        * Point lights work like light bulbs. They emit light from a sphere around its current position. Rotating a point light, has no effect on the lighting. Unity fades the light intensity as you get further away from the light. Closer to the light will appear much brighter than lighting at the end of its range.
+        * Spot lights work like flashlights, stage lights, or lighthouse light. These lights shoot a cone of light out from its origin and change lighting based on the spot light’s position AND rotation. The Spot Angle value changes the width of the cone.
+        * Area lights act like flood lights in a stadium and are much more complex and can’t be run in realtime. They must be baked or precomputed.
+
+    * How are the four light types similar?
+
+        * All of the lights have the following properties that can be adjusted to suit your experience.
+
+            * Color - This property lets us change the color tint of our light. Make a light red and another blue to simulate emergency lighting. Or make a traffic light by making a red, a yellow, and a green light.
+
+            * Intensity - This is how bright or intense our light is, and ranges from 0 (no effect) to 8 (max effect that’s almost blinding).
+
+            * Shadows - Can be computationally expensive when done incorrectly. Options:
+
+                * No Shadows - no shadows at all. This is the recommended setting for mobile, realtime lighting.
+
+                * Hard Shadows - only shadows with hard edges. This type of shadows don’t exist in the real world, but they are more performant.
+
+                * Soft Shadows - most realistic shadows with softer edges. These are the most expensive type of shadows and can impact performance.
+
+            * Render Mode - Lets us define how important our lighting is. Keep on Auto generally. If Unity sees that we’re struggling with performance, it can turn off the light to improve performance.
+
+            * Culling mask - Choose which layers to render the lighting on.
+    
+    * What is baking?
+
+        * Baking is the process of calculating our shadows and lighting data before we actually run our experience. We can compute lighting effects, light bounces, and realistic shadows. This data is saved in a lightmap texture that is referenced at runtime. In order to get the most out of baked lighting, the light and objects in the scene need to be marked as static. Baked lighting doesn’t work for objects or lights that move in the scene as those can’t be computed in advance. To bake our lighting:
+
+            * Set non-moving objects to static by clicking the box in top of the Inspector window. This needs to be done for each object.
+            * Set light(s) to static by changing the light “Mode” property.
+            * Window > Lighting > Settings to open the Lighting window.
+            * In the lighting window, hit Generate Lighting.
+    
+    * What’s the lighting window about?
+
+        * The lighting window has 3 tabs. This window contains a lot of information about how we light our scene. We open the lighting window by going to Window > Lighting > Settings and docking the window in our Unity editor.
+
+        * Scene: This tab lets us control the settings of light in our scene.
+
+            * Environment Lighting - Remember that skybox material we created a couple of lessons ago? We can use that material here, to apply it to the scene. Ambient Lighting, a light source that affects all objects in the scene in all directions, can also be set here.
+
+            * Global Illumination - This is Unity’s model of how light bounces off of nearby objects. This portion (containing Realtime Lighting, Mixed Lighting, and Lightmapping Settings) allows us some control over the parameters Unity uses when baking lighting.
+        
+        * Global Maps: After we bake a scene, we can see what our light maps look like on this tab. It’s pretty hard to see much in the small image here, but you can see stats about how much data is being stored to make decisions to optimize your maps.
+
+        * Object Maps: We can look at specific properties of a selected game object in this tab.
+    
+    * What other quality settings can I use to make my scenes look more polished?
+
+        * Go to Edit > Project Settings > Quality to see the Quality Settings. If we’re only interested in mobile for our project, we can delete most of the default settings (by clicking on the Trash can icon in the inspector) and leave only “Fastest”. Click on Fastest so we can edit some of the settings for this quality setting.
+
+        * Set Pixel Light Count to 0
+            * This setting tells Unity how many realtime lights it should consider for a single pixel. If we have no realtime lights in our scene, setting this to 0 is ideal.
+        
+        * Set Texture Quality to Full.
+            * This will help reduce the quality of textures, if they aren’t optimized for mobile. If we’ve already optimized the textures in our scene, we can set this to full for mobile and be fine.
+        
+        * Set Anti Aliasing to 2x Multi Sampling.
+            * This helps reduce blurred edges and lines in our VR scenes. It’s a little more computationally expensive, but in VR we’re using less than half of the resolution of the display so it’s more of a problem to have the blurry lines. Making the computational cost, worth it.
+        
+        * Set Shadows to Disable Shadows.
+            * This only disables our realtime shadows and has no effect on baked shadows.
