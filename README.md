@@ -193,7 +193,7 @@
 
 ## VR Scenes and Objects
 
-## Lesson 2: Game Objects
+### Lesson 2: Game Objects
 
 * Primitives
     * Cubes
@@ -239,7 +239,7 @@
         * Every `GameObject` in Unity has a Transform component. This is the component that tracks the object’s position, rotation, and scale. You can change the properties by changing the values in the Inspector or by using the move, rotate, or scale tools in the upper left corner of Unity.
     * What are transform hierarchies and how can I create one?
 
-## Lesson 3: Materials
+### Lesson 3: Materials
 
 * Materials are good for coloring, shading and texture
 
@@ -299,7 +299,7 @@
     * What makes up a model?
         * Models are made up of materials, textures and meshes.
 
-## Lesson 4: Animations
+### Lesson 4: Animations
 
 * Click on `Window` -> `Animation` -> `Animation` to open the animation screen (you can drag it if you want)
 * In order to create an animation, you first need to select an object in the `Hierarchy`
@@ -454,7 +454,7 @@
 
     * Note: This lesson didn’t show you how to change the animations with your own scripts. That will be included in an upcoming lesson.
 
-## Lesson 5: Cameras
+### Lesson 5: Cameras
 
 * To view a `Scene` in Unity we will use a `Camera` `Game Object`.
 * Whenever you create a new `Scene` in Unity, it will be populated with a `Main Camera`
@@ -653,7 +653,7 @@
         2. Make your camera a child of the GvrEditorEmulator. Reset the camera’s transform component. Be sure your camera is tagged as “MainCamera”. Add a GvrPointerPhysicsRaycaster component to the camera. This will enable the camera to interact with 3D objects in your scenes.
         3. Add a GvrReticlePointer prefab as a child of your camera. This will give you the reticle (the little white dot) in the center of your camera. This is used to interact with things in your scene.
 
-## Lesson 6: Lights
+### Lesson 6: Lights
 
 * ![lighting](./images/lighting.PNG)
 
@@ -985,3 +985,249 @@
         
         * Set Shadows to Disable Shadows.
             * This only disables our realtime shadows and has no effect on baked shadows.
+
+
+## VR Software Development
+
+### Lesson 2: Creating Scripts
+
+* In unity we write scripts that define `Behaviors` attached to an `Game Object`
+
+* For VR, this might be called 60, 90, or even 120 times per second.
+    * This speed depends on hardware and a variety of software factors
+
+* `Time.deltaTime` gives you framerate-independent animation.
+    * Contains the amount of time it took to render the previous frame.
+    * `Time.time` stores the amount of time elapsed since the start of the game, while `Time.deltaTime` stores the amount of time it took to render the previous frame and can be used to produce smooth framerate-independent rates of change over time.
+    * `transform.Translate(0, -2.5f * Time.deltaTime, 0, Space.World);` 
+    * `Space.World`: This means that the GameObject’s Transform is altered via the world’s space instead of the GameObject’s local space
+
+* `transform.position = new Vector3(0, 5 + Mathf.Sin(Time.time * 5.0f), 0);`
+    * Make a `transform` that follows the `sin` function
+
+* Lesson Review
+
+    * What are scripts?
+        * Scripts are behaviors that get attached to Game Objects in Unity. Scripts are made up of methods and properties. Methods are typically the major verbs. For example, the Start method contains all the instructions that need to be run when you first load the scene. Methods are a great way to organize your scripts into logical parts. For example, you might have a method that contains instructions for when a certain thing happens.
+    
+    * How could we add physics to an object to make it fall?
+        * One way is to add a collider on the object and then add a rigidbody. This will use Unity’s physics system to simulate gravity and it will fall realistically.
+
+        * If we wanted to be more specific about how we wanted our object to fall, we would remove the rigidbody and collider from the object and add some code (in a script). If we decide that we want an object to fall until it hits the ground and then stop, we could add the following code in a script attached to the object we want to fall.
+
+        * ```csharp
+            void Update() {
+                // First we check to see if the coconut is above the ground.
+                if(transform.position.y > 0.6f) { 
+                    // If the coconut is above the ground, we’ll make it drop a little. 
+                    transform.Translate(0, -2.5f * Time.deltaTime, 0, Space.World);
+                }
+            }
+            ```
+
+    * What does Time.deltaTime do?
+
+        * If we’re doing something in an Update method, we don’t really know how often it will be called. It could be anywhere from 60 to 120 times a second for VR. Time.deltaTime helps smooth out any animations or updates over time, which means that it helps give framerate-independent animations and updates. This means that the animations or updates will look the same regardless of the frame rate. The variable Time.deltaTime contains the amount of time it took to render the previous frame. If we multiply that by a constant variable, our animation will run (or, in the given example, our coconut will fall) at the same speed if your frame rate is 60, 90, or 120 fps.
+
+    * How could we get an object move back and forth between two points?
+
+        * Our Mathf.Sin function is great for these types of use cases. In a script attached to an object we want to move between two points along the vertical (Y) axis, we’d add this bit of code in the Update method.
+
+        * ```csharp
+            void Update() {
+                // x, y, z
+                transform.position = new Vector3(0, 5 + Mathf.Sin(Time.time * 5.0f), 0);
+            }
+            ```
+        * This line of code is basically, changing the object’s Y position every frame to a new position which is a Vector3. A Vector3 is a variable that contains an X, a Y, and a Z. In our example above, we create a new Vector3 each frame that has a 0 for X and Z and then the Y is the only variable that changes based on the Mathf.Sin function.
+
+### Lesson 3: Controlling Objects Using Code
+
+* Unity Documentation
+    * Divided into two sections:
+        * Manual
+            * Design and components
+        * Scripting API
+            * Programming
+            * Divided into namespaces
+                * namespaces establish a grouping between related objects
+                * `UnityEngine`: functions that unity offers in order for you to develop your game
+                * `UnityEditor`: functions that you can integrate to unity in order to enhance the tool it self.
+
+* Almost all scripts start with using `UnityEngine`
+
+* This gives you access to all the objects in the UnityEngine namespace
+
+* Every `Component` has a question mark that will lead you to the `Unity` and `Scripting` docs.
+
+* Creating objects using code
+    * Passing an object that exists in a `Scene` as a `Reference` to you script
+    * ![by-reference](./images/object-by-reference.PNG)
+
+* Creating a copy from a reference
+    * `Object.Instantiate(objectToCreate, new Vector3(2, 4, 5), Quaternion.identity);`
+        * We use `Vector3` in order to specify a location in 3D space
+        * `Quaternions`: How unity handles 3D rotation. Better for simulations than Euler angles
+
+* Prefab
+    * Allow you to store a `GameObject`, all of its componenets, and settings in a file on your hard drive.
+
+    * Think of prefabs as a "plan" that Unity follows to create certain GameObjects.
+
+    * To create a `Prefab` you just need to drag-and-drop a `GameObject` from the `Hierarchy` section. 
+
+* Controlling Components Using Code
+
+    * ```csharp
+        using System.Collections;
+        using System.Collections.Generic;
+        using UnityEngine;
+
+        public class NewBehaviourScript : MonoBehaviour {
+
+            public GameObject objectToCreate;
+
+            // Use this for initialization
+            void Start () {
+                for (int i = 0; i < 50; i++) {
+                    GameObject newSeagull = (GameObject)Object.Instantiate(objectToCreate, new Vector3(i, 0, 0), Quaternion.identity);
+                    Renderer objectRenderer = newSeagull.GetComponentInChildren<Renderer>();
+                    objectRenderer.material.color = Color.white * Random.value;
+                }
+                
+                //Object.Instantiate(objectToCreate, new Vector3(2, 4, 5), Quaternion.identity);
+            }
+            
+            // Update is called once per frame
+            void Update () {
+                
+            }
+        }
+    ```
+
+* Lesson Review
+
+    * Unity Documentation
+
+        * The Unity Documentation is divided up into two main sections, the manual and scripting. The manual shows you how Unity is designed and how to use the editor. The scripting section is concerned with Unity programming. For the course, we’ll primarily be focusing on the scripting.
+
+    * What are namespaces and how do I include them in my scripts?
+
+        * The scripting API is divided into namespaces, which establish groups between related objects. Unity uses UnityEngine and UnityEditor primarily. The UnityEngine namespace contains objects that have to do with when the app is actually running. The UnityEditor namespace is all about extending the Unity editor. We’ll primarily be using what’s in the UnityEngine namespace.
+
+        * To use the UnityEngine namespace, for example, we’d write this at the top of our scripts.
+
+            * `using UnityEngine;`
+        
+        * This line of code gives us access to everything within that grouping or namespace.
+
+        * The UnityEngine.Classes namespace contain all the important classes or objects that we should learn in Unity. Classes represent what’s common between objects. For example, all cameras have things in common and those things are described in the camera class.
+
+        * Tip: To jump directly to a components documentation, click the icon of the book with the question mark in the Inspector window.
+
+    * What are references and how can I create one?
+
+        * References allow you to pass objects and components into a script through the Unity Editor so you can control them in the script. References are defined in scripts at the top, above any methods the script may have. For example, you might have some of the following references in a script:
+
+        * ```csharp
+            public float runSpeed;
+            public GameObject player;
+            public string playerName;
+            ```
+
+        * The word public in each of the lines above, allow us to see and change these in the Inspector. It’s also an “access modifier.” This means that other scripts in the project can see these things and use them. Other access modifiers are private and protected. Private means that only this script can access the references and we won’t be able to see them in the editor.
+
+        * The next part of the references is the “data type” of the reference. In our example above, we’ve got float, GameObject, and string. A data type lets our code know what kind of data we’re storing. In our runSpeed variable, we’d be storing a float like 2.5.
+
+        * Tip: A script can also be a data type. For example, let’s say we have a Door script.
+
+        * ```csharp 
+            public class Door {
+                public bool isOpen;
+
+                void Start() {
+                isOpen = false;
+                }
+
+                public void Open() {
+                    isOpen = true;
+                    // Open door.
+                }
+                public void Close() {
+                    isOpen = false;
+                    // Close door
+                }
+            }
+            ```
+        
+        * We could have a second script that has a reference to an this door script that’s attached to a gameobject.
+
+            * `public  Door myDoor;`
+
+        * Inside that second script, we’d be able to call methods in our door script, by doing the following:
+
+            * `myDoor.Open();`
+        
+        * The last part of references is the variable name. These names are written in “Camelcase,” which means that the first word is lowercase and each subsequent word is capitalized. Notice how there’s no spaces between the words? The capital letters help indicate a new word and make it easier to read. For example, playerrunspeed is much harder to read than playerRunSpeed.
+    
+    * What are Vector 3s?
+
+        * The Vector3 variable type is how we specify positions in 3D space. Each Vector3 has an X coordinate, a Y coordinate, and a Z coordinate.
+    
+    * What are Quaternions?
+
+        * Quaternions are how Unity handles 3D rotations. Unity uses them because they’re better for simulations. Unity handles all the complex math for us.
+    
+    * I know I can control objects with code. Can I also create objects with code?
+
+        * Yes! We can “Instantiate” objects, create a new instance of something, through code. We used the Instantiate method to create copies of gameobjects.
+
+        * ```csharp
+            // objectToCreate is a GameObject that we have a reference to.
+            Object.Instantiate(objectToCreate, new Vector3(2, 4, 6), Quaternion.identity);
+            ```
+        
+        * The instantiate can be used in a variety of ways. In the above example, the method is called and we pass in the reference to what we want copied (objectToCreate), where we want the object to be (the new Vector3 position), and how we want it rotated (Quaternion.identity is equal to the same rotation as the objectToCreate reference has).
+
+        * Sometimes we may want to save a reference to an object we create to change it in some way. (Like changing the color, adjusting the position, etc.) To do that we need to add a few more things to our instantiate line.
+
+        * `GameObject newObject = (GameObject) Object.Instantiate(objectToCreate, new Vector3(2, 4, 6), Quaternion.identity);`
+
+        * The first GameObject is the data type of the object we’re creating. The second part (newObject) is the variable name that we make up. The “(GameObject)” is called a “cast”. When we call the Object.Instantiate method, an object with a datatype of object gets returned. The cast is how we say that we plan on using that object as a Unity GameObject and not as a generic object type.
+    
+    * What are comments?
+
+        * Comments are great for writing programming notes for ourselves and others. For example, comments might be used to summarize what a method is doing.
+
+        * They’re also useful for saving code for later reference. Before publishing and submitting your code, commented out code should be removed. This will help make your code cleaner and easier for others to read.
+
+        * To create comments in a C# script add two forward slashes (//) before a line. If you want to comment out multiple lines of code, you can add a forward slash and asterisk (/) before and an asterisk and forward slash (/) after the code you want commented out. For example:
+
+        * ```csharp
+            /*
+            This is an example. 
+            It will comment out many lines.
+            If you don’t add the ending asterisk and forward slash, 
+            it will comment out everything through the end of the file. 
+            */
+            ```
+        
+        * What are for loops?
+
+            * For loops are how we tell Unity to do something several times. For example,
+
+            * ```csharp
+                for(int i = 0; i < 5; i++) {
+                    Debug.Log(i);
+                }
+            ```
+        
+        * In this example, we set the variable i to be 0. Then we check to see if i (0) is less than 5. Since it is, it will run our Debug.Log() line and print the value of i (which is 0) to our console. Then it goes up to the i++ which will increment i by one. I will now be 1. Then it goes back to the conditional to see if i (which is now 1) is less than 5. Our code continues through this loop until i is 5. At that point, 5 is not less than 5, so we’re done. Our console would have logs for 0, 1, 2, 3, and 4.
+
+    * What are prefabs and how can I make one?
+
+        * Prefabs are Unity’s way of allowing you to save a GameObject in a file. This file includes all of the GameObject’s components and settings. Prefabs are a way for you to setup objects and reuse them across scenes. Prefabs are shown with little blue cube icons.
+
+        * To create a prefab, click and drag the object from your Hierarchy to your Project window.
+
+        * Tip: References can be created by dragging objects from the Hierarchy and the Project window. If you are creating objects via scripts and they aren’t looking like you expect, it’s likely because your reference is the object in the Hierarchy and not the prefab. To fix this, drag the prefab from the Project window into your scripts reference instead.
