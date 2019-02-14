@@ -1592,6 +1592,8 @@
 
 * Once we have specified a `Collision` component, then we need to specify a `Rigidbody` component to interface with the Unity physics simulation
 
+* The `Collider` enables collision and the `Rigidbody` enables physics (gravity);
+
 * `Ray Casting`: shooting a ray for a location and hoping that it hits the colliders at a given moment.
     * Example: detect when someone is looking at an object in VR
 
@@ -1721,6 +1723,9 @@
     * Check project code for full implementation
 
 * `Shader` is code to create a custom `Material` and run it on the GPU. Like the ocean `Shader` we can manipulate materials in real time.
+
+* What method is used to create a new object in the scene?
+    * `Instantiate`
 
 * Lesson Review
 
