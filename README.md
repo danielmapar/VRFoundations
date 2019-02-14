@@ -1212,14 +1212,14 @@
             */
             ```
         
-        * What are for loops?
+    * What are for loops?
 
-            * For loops are how we tell Unity to do something several times. For example,
+        * For loops are how we tell Unity to do something several times. For example,
 
-            * ```csharp
-                for(int i = 0; i < 5; i++) {
-                    Debug.Log(i);
-                }
+        * ```csharp
+            for(int i = 0; i < 5; i++) {
+                 Debug.Log(i);
+            }
             ```
         
         * In this example, we set the variable i to be 0. Then we check to see if i (0) is less than 5. Since it is, it will run our Debug.Log() line and print the value of i (which is 0) to our console. Then it goes up to the i++ which will increment i by one. I will now be 1. Then it goes back to the conditional to see if i (which is now 1) is less than 5. Our code continues through this loop until i is 5. At that point, 5 is not less than 5, so we’re done. Our console would have logs for 0, 1, 2, 3, and 4.
@@ -1231,3 +1231,519 @@
         * To create a prefab, click and drag the object from your Hierarchy to your Project window.
 
         * Tip: References can be created by dragging objects from the Hierarchy and the Project window. If you are creating objects via scripts and they aren’t looking like you expect, it’s likely because your reference is the object in the Hierarchy and not the prefab. To fix this, drag the prefab from the Project window into your scripts reference instead.
+
+### Lesson 4: VR Interactions
+
+* `Right Click` -> `UI` -> `Text`
+    * That will create a `Canvas` object that fills up the entire screen
+        * This canvas will be feeling up the screen in 2d, but in case you want to use the text in a 3d space you can use the `World Space` option
+    * Set the `Canvas` to use `World Space` Render Mode
+    * You can make the text more clear by clicking on `Canvas` and setting `Dynamic Pixel Per Unit` `5`
+    * Inside the `Text` object you can set `Vertical Overflow` to break a line of text
+
+* To interact with things in the VR environment we need to setup an `Event System`.
+    * This system listen for things that are happening in the `Scene` like clicks, hovering and more
+    * To use the `Event System` right-click on the Hierarchy -> `UI` -> `Event System`
+        * Remove `Standalone Input Module` and add `Gvr Input Module`
+    * In order for events to be triggered, our `Game Object` must have a collider associated to it.
+        * You can add a `Box Collider` for the Vacation Box in this case
+        * The collider is perfectly sized to the vacation box size
+    * In our Vacation Box `Game Object` we also need to create a `Event Trigger`.
+        * After creating it, click on `Add New Event Type` and select `PointerClick`
+        * Also click the plus button
+        * After that, create a new `Script` component by click on `Add component`
+        * ![link-script-with-event](./images/link-script-with-event.PNG)
+            * Link our `Script` to the objects `Event Trigger`
+            * ```csharp
+                using System.Collections;
+                using System.Collections.Generic;
+                using UnityEngine;
+
+                public class ChangeScene : MonoBehaviour {
+                    public void GoToScene()
+                    {
+                        Debug.Log("My method was called");
+                    }
+
+                }
+                ```
+    
+    * Since we want to change the `Scene` in the game, we need to first go to `File` -> `Build Settings`.
+        * You will see a `Scene In Build` area that supports drag-and-drop
+            * ![load-scenes](./images/load-scenes.PNG) 
+            * ```csharp
+                using System.Collections;
+                using System.Collections.Generic;
+                using UnityEngine;
+                using UnityEngine.SceneManagement;
+
+                public class ChangeScene : MonoBehaviour {
+                    public void GoToScene()
+                    {
+                        Debug.Log("My method was called");
+                        SceneManager.LoadScene("00-FallingCoconut");
+                    }
+
+                }
+                ``` 
+                * If you right-click the code editor, it may help with some auto-complete
+            * ```csharp
+                using System.Collections;
+                using System.Collections.Generic;
+                using UnityEngine;
+                using UnityEngine.SceneManagement;
+
+                public class ChangeScene : MonoBehaviour {
+                    public void GoToScene(string sceneName)
+                    {
+                        Debug.Log("My method was called");
+                        SceneManager.LoadScene(sceneName);
+                    }
+
+                }
+                ```
+                * ![load-scene-by-param](./images/load-scene-by-param.PNG)   
+
+* Lesson Review
+
+    * How can I use Unity’s UI elements in my VR scenes?
+
+        * Unity’s Canvas defaults to a “Screen Space - Overlay”, which renders everything over the whole main camera. However, in VR we can’t use it in that mode. We need to switch the canvas Render Mode to be “World Space”.
+
+        * After we change the render mode, we then have to size the canvas appropriately. We can use the scale tool to resize the entire thing down. Then we need to position it in the scene.
+
+    * The text on my canvas is blurry. How can I fix it?
+
+        * To fix blurry text on a canvas, we’ll increase the Canvas’s Dynamic Pixels Per Unit. This value defaults to 1. Increasing it will sharpen the text. Increasing this number too much can lead to performance issues, so it’s recommended to keep this as low as possible.
+
+    * How do I make a 3D object interactable?
+
+        * We need to add a couple of things to make an object interactable.
+
+        * Add the GvrEventSystem to the scene. Or you can make your own by creating a new event system and adding the GvrPointerInputModule component to it.
+        * Add a collider to the 3D object. This can be a box collider, a sphere collider, or any type of collider.
+        * Add an Event Trigger component to the 3D object.
+            * Click Add New Event Type to add a PointerClick event.
+            * Click the plus to add an empty object holder. This will hold the object that will perform some action when the event happens.
+            * Wire up the object by clicking and draging the object with the method you want to call from the Hierarchy over to the object holder box in the PointerClick event trigger.
+            * Decide on a method to run by clicking on the “No Function” dropdown. Navigate to the script and method you want to call when the event happens.
+    
+    * What’s a debug log statement and what are they used for?
+
+        * Debug log statements are used a lot for testing and problem solving our code. We’ll see these messages in the Console window. To write one:
+
+            * `Debug.Log(“My message here”);`
+
+        * You can include any message in a debug log statement. If we wanted to test if a method was called that could be
+
+            * `Debug.Log(“My method was called.”);`
+
+        * Debug log statements can also include variables through a process called “Concatenation”. It will essentially put strings together. For example, let’s say we wanted to print out a player’s score when he scores a point.
+
+            * ```csharp
+                public float score = 0; 
+
+                public void ScorePoint() {
+                    score++;
+                    Debug.Log("We’ve scored a point. We now have " + score + " point(s).");
+                }
+                ```
+
+        * Whenever the ScorePoint method is called, we would increment the score value by one and print out a line with the score’s value. The first time the method is called, we’d print out a line that would say “We’ve scored a point. We now have 1 point(s).”
+    
+    * How can I write a script that changes the scene?
+
+        * Be sure that your scenes have been added to the build settings.
+
+            * Open build settings by going to File > Build Settings.
+            * Click and drag your scenes from your Project window into the “Scenes in Build” box at the top of the Build Settings.
+            * Tip: The first scene listed in the build settings is going to be the first scene that loads up in your build files.
+        
+        * Add some code in a script to change the scene.
+
+        * ```csharp
+            using UnityEngine.SceneManagement;
+
+            public class ChangeScene : MonoBehaviour {
+                public void GoToScene() {
+                    SceneManager.LoadScene(“Name of scene to load“);
+                }
+            }
+            ```
+
+        * Replace the “Name of scene to load” with the name of the scene you want to switch to.
+
+        * Another way we can accomplish the same thing is to use a variable (also known as a parameter) to set the scene name. This would give us some flexibility with our script, so we could change the scene we load in the Unity editor.
+
+        * ```csharp
+            using UnityEngine.SceneManagement;
+
+            public class ChangeScene : MonoBehaviour {
+                public void GoToScene(string sceneToLoad) {
+                    SceneManager.LoadScene(sceneToLoad);
+                }
+            }
+            ```
+
+        * When we do the next step (setting up the Event Trigger), we’ll need to include the name of the scene we want to go to in the box underneath the function name.
+
+            * Call the script with an Event Trigger. (See the above review question for making 3D objects interactable if you need a review.)
+
+
+### Lesson 5: Programming Animations
+
+* Imagine you're in a car. You have a position and rotation relative to in the car. You're in the driver seat facing out the window. BUT, as the car drives around, and turns, your position on earth is changing, as well as your cardinal facing direction, but your position within the car has not changed.
+
+* Same goes with the GameObjects. If you nest a GameObject in another, and then move the parent GameObject around, the child GameObject moves with it. It's local position is that inside its parent, where as the global is its position in the scene. 
+
+*  Lerp stands for linear interpolation and Slerp stands for spherical linear interpolation, and both rely on a time parameter that indicates how much to interpolate.
+
+* The Lerp and Slerp methods are available in several UnityEngine classes. The parameters the method takes depends on the class it belongs to, for example:
+
+    * `Mathf.Lerp` - Takes three floats
+    * `Vector3.Lerp` - Takes two Vector3s and one float
+    * `Quaternion.Lerp` - Takes two Quaternions and one float
+
+* ```csharp
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class RotateLight : MonoBehaviour {
+
+
+        public GameObject directionalLight;
+
+        // Use this for initialization
+        void Start () {
+            
+        }
+
+        float startTime = 0f;
+
+        // Update is called once per frame
+        void Update () {
+            Quaternion startRotation = Quaternion.Euler(50f, 20f, 0f);
+            Quaternion endRotation = startRotation * Quaternion.Euler(0f, 180f, 0f); // adding rotations by multiplying
+            // directionalLight.transform.Rotate(0f, Time.deltaTime, 0f);
+            directionalLight.transform.rotation = Quaternion.Slerp(startRotation, endRotation, startTime / 10f);
+            startTime += Time.deltaTime;
+        }
+    }
+    ```
+
+* ```csharp
+        using UnityEngine;
+        using System.Collections;
+
+        public class RotateLight : MonoBehaviour
+        {
+
+            public GameObject directionalLight;
+
+            public Animator sunRotationAnimation;
+
+            float startTime = 0f;
+            bool isPressed = false;
+            string whoRocks = "Udacity Rocks";
+
+            // Use this for initialization
+            void Start()
+            {
+                //GvrViewer.Instance.OnTrigger += ActivateRotation;
+                sunRotationAnimation.StartPlayback();
+            }
+
+            // Update is called once per frame
+            void Update()
+            {
+                Quaternion startRotation = Quaternion.Euler(50f, 30f, 0f);
+                Quaternion endRotation = startRotation * Quaternion.Euler(0f, 180f, 0f);
+                if (isPressed == true)
+                {
+                    //directionalLight.transform.rotation = Quaternion.Slerp(startRotation, endRotation, startTime / 10f);
+                    /*
+                    //sunRotationAnimation.StartPlayback ();
+                        sunRotationAnimation.enabled = false; // Disable the Animator component
+            
+                        //sunRotationAnimation.StopPlayback ();
+                        sunRotationAnimation.enabled = true; // Enable the Animator component
+
+                    */
+                    sunRotationAnimation.StopPlayback();
+                    startTime += Time.deltaTime;
+                }
+
+                // Replaces 'GvrViewer.Instance.OnTrigger += ActivateRotation;'
+                // Typically would be placed at the top of the Update() method, but
+                // placed here for the script to better match up with the video
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ActivateRotation();
+                }
+            }
+
+            public void ActivateRotation()
+            {
+                isPressed = true;
+                sunRotationAnimation.SetBool("ChangeColor", true);
+            }
+        }
+    ```
+
+* Lesson Review
+
+    * How can we rotate a gameobject through a script?
+
+        * There are a couple of different ways we could rotate objects in scripts. In our script, we’ll need to create a public reference to the object we plan to rotate. Then we’ll need to assign it in the inspector.
+
+        * Use the Rotate method. If we wanted to use the Rotate method to rotate an object really slowly around the Y axis, our code would look something like this.:
+
+            * ```csharp
+                public GameObject objectToRotate;
+
+                void Update() {
+                    objectToRotate.transform.Rotate(0f, Time.deltaTime, 0f);
+                }
+                ```
+        
+        * Use Slerp. Using Slerp, we must define the start and ending rotations (these are stored as Quaternions).
+
+        * We also need to define a time value for the Slerp method. This time value must be a number between 0 and 1. If it’s 0, it’ll stay at the start rotation, and if it’s 1 it’ll stay at the end. Can you guess what it’ll be if we enter 0.5? If you guessed in the middle of the two points, you’re right. To calculate this time value, we’ll use Time.time and divide it by a value. In the example here, I used 50. This will make the rotation much slower. Using a smaller number, will make the rotation faster.
+
+        * ```csharp
+            public GameObject objectToRotate;
+            public float timeScale = 50f;
+
+            void Update() {
+                Quaternion startRotation = Quaternion.Euler(50f, 30f, 0f);
+                Quaternion endRotation = startRotation * Quaternion.Euler(0f, 180f, 0f);
+                objectToRotate.transform.rotation = Quaternion.Slerp(startRotation, endRotation, Time.time / timeScale);
+            }
+            ```
+        * Tip: To add two Quaternion’s together, you need to multiply them.
+
+    * What is interpolation, “lerp”, and “slerp”?
+
+        * Interpolation is the process of creating data points between two given points. For example, if we have two points A and B that are sitting on a table 1 foot apart. The process of interpolation would be the process of creating the points that lead from point A to point B. For example, these might be points 1 inch apart along the distance between the two points.
+
+        * Lerp is “linear interpolation” and Slerp is “spherical linear interpolation”. Both use a time variable to determine how much to interpolate. Lerp uses two points, and interpolates in a straight line from point A to point B. Slerp, on the other hand, also uses two points, but interpolates in an arch from point A to point B. Slerp could be used, for example, to animate a rising and setting sun.
+    
+    * How can we control our Animator in a script?
+
+        * There are a lot of ways we can interact with our Animator.
+
+    
+    * Stop or Start Animator Component
+
+        * If we wanted to stop our animator, we could do that with the enabled property.
+
+        * ```csharp
+            public Animator animator;
+
+            public void StopOurAnimator() {
+                animator.enabled = false; 
+            }
+
+            public void StartOurAnimator() {
+                animator.enabled = true;
+            }
+            ```
+        
+        * Play An Animation
+
+            * If we wanted to play a specific animation, we could do that with the Play method. We’d need to provide the name of the animation state to play.
+
+            * ```csharp
+                public Animator animator;
+
+                public void StartOurAnimator() {
+                    animator.Play(“animationStateName”);
+                }
+                ```
+        
+        * Set Animation Parameters
+
+            * A lot of times we’ll use parameters in our animator. We can edit those through scripts as well. For example, let’s say we have a boolean parameter in our Animator called “isLocked”. We have an animation set up to play when the isLocked is false. In our code, we’d use the Animator’s SetBool method.
+
+            * ```csharp
+                public Animator animator;
+
+                public void Unlock() {
+                    animator.SetBool(“isLocked”, false);
+                }
+                ```
+            
+            * Tip: The animator has other methods for different types of animator parameters. These include SetTrigger, SetFloat, and SetInt. The only one that is used differently is the SetTrigger. Instead of providing two values like the example above (which has the parameter name and the value we want to set it to), the SetTrigger method only needs the parameter name.
+
+### Lesson 6: Physics & Audio
+
+* Types of Collider Components
+    * Box Collider
+    * Capsule Collider
+    * Sphere Collider
+    * Mesh Collider
+
+* This collider specify the area we want to apply physics into our object
+
+* All primitive objects already have a `Collider` component associated to them
+
+* If our object does not fit any of those Colliders we can use our own Mesh `Mesh Collider` and use that for collision detection 
+
+* Once we have specified a `Collision` component, then we need to specify a `Rigidbody` component to interface with the Unity physics simulation
+
+* `Ray Casting`: shooting a ray for a location and hoping that it hits the colliders at a given moment.
+    * Example: detect when someone is looking at an object in VR
+
+* `Fixed Update`: Similar to the `Update` method, but it is the appropriate place to write code for Object collision and Ray Casting in the Unity engine.
+
+* ```csharp
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class DetectTreasure : MonoBehaviour {
+
+        public GameObject chest;
+        private Animator chestAnimator;
+        private bool chestOpen = false;
+
+        void Start()
+        {
+            chestAnimator = chest.GetComponent<Animator>();
+        }
+
+        void FixedUpdate()
+        {
+            Vector3 fwd = transform.TransformDirection(Vector3.forward);
+
+            // We provide our position, the vector the ray will travel and how far we want the ray to travel (10 meters)
+            if (Physics.Raycast(transform.position, fwd, 10) && !chestOpen)
+            {
+                print("There is something in front of the object!");
+                chestAnimator.SetTrigger("LookedToChest");
+                chestOpen = true;
+            }
+        }
+    }
+    ```
+
+* In order to add audio to our `Scene`, we will create an empty `GameObject` and associate an `Audio Source` to it.
+    * `Spatial Blend`: this dictates wheter the position of our object in `Scene` affects how we hear it. Some sounds like background music we want to hear from anywhere (2d spatial blend), but other ones need to be 3d
+
+* Unity knows our distance from the objects because of the `Audio Listener` component associated to the `Camera`. This acts as the position to calculate all spatial audio
+
+* ```csharp
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class AudioPicker : MonoBehaviour {
+
+        public AudioClip[] soundFiles;
+
+        public AudioSource soundSource;
+
+        // Use this for initialization
+        void Start () {
+            int index = Random.Range(0, soundFiles.Length);
+            soundSource.clip = soundFiles[index];
+            soundSource.Play();
+
+        }
+        
+        // Update is called once per frame
+        void Update () {
+            
+        }
+    }
+    ```
+
+* Lesson Review
+
+    * How can I get physics setup in my project?
+
+        * Adding physics to our VR projects help our virtual environments feel more realistic. To use Unity’s physics system, we’ll need to add a collider on our 3D objects. Unity has box, capsule, sphere, and mesh colliders. Colliders help define areas where we want physics to work on.
+
+            * Tip: Primitive colliders are more performant than mesh colliders. Use them when you can to improve performance.
+        
+        * We’ll also need to add a Rigidbody component to our object. This is what will actually be used to calculate forces like gravity, drag and mass.
+
+    * What is raycasting?
+
+        * Raycasting is a way we can simulate looking for something.
+
+        * For example, let’s say we lost our keys or someone moved them. Our eyes would scan around the room looking for them. When we find them, we can pick them up and go about our day.
+
+        * In that example, imagine we’re drawing a line from our eyes to the point we are looking at. That line would move around the room as we look. That’s what raycasting does. It allows us to start at one point (our eyes) and draw a line (look) in a direction. If our line intersects with something we care about (our keys), we can take action. If not, we continue our search.
+
+        * To use Raycasting in Unity, we need two pieces of information. The point we start at (like our eyes) and the directions we’re looking (forward). Because raycasting uses the Unity physics engine, FixedUpdate is the best place for this code. FixedUpdate works like the Update method, but instead of updating every frame, it runs it at fixed intervals (whenever there’s a fixed framerate frame).
+
+        * Our call to Physics.Raycast takes a starting point, our direction, and the distance you want the ray to go.
+
+        * ```csharp
+            void FixedUpdate()
+            {
+                Vector3 fwd = transform.TransformDirection(Vector3.forward);
+
+                if (Physics.Raycast(transform.position, fwd, 10))
+                    print("There is something in front of the object!");
+            }
+            ```
+        
+        * Tip: Rigidbodies and Physics code should go in the FixedUpdate method instead of the Update method.
+    
+    * Setup Objects For Use With Raycasting
+
+        * Anything we want to detect with a raycast needs to have a collider on it.
+
+        * Learn more about raycasting by checking out the Unity Documentation for Raycasting.
+    
+    * How can I add audio in my scene?
+
+        * First, we need to be sure we’ve include the audio file into our project. Bringing an audio file into Unity, it is automatically converted into an audio clip.
+
+        * On the object that we want to play the sound, we’ll add an Audio Source component. Then click and drag the audio clip into the “AudioCilp” slot of the Audio Source component.
+
+        * To ensure our audio is setup properly for VR, we’ll change the Spacial Blend property. In the real world, the closer we are to an object making noise, the louder it is. Most of the audio we use in VR we’ll want to be setup similarly. Move the Spacial blend slider to 3D to make our audio realistic. If you’re wanting to add things like background audio clips or anything that you want the users to be able to hear the same way regardless of their position in the scene, we’ll move this slider to 2D.
+
+        * In order for audio to work properly in our scenes, we’ll need some audio sources (the objects that make the sounds) and one audio listener. The audio listener is typically found on the main camera (or on the camera rig in many VR sdks).
+    
+    * How can I get a random number?
+
+        * To generate a random number in a script, you can use the Random.Range method. This method takes in two values. The first is the minimum, the second is the maximum. This method uses the maximum as the first number that would NOT be returned. For example, if we do something like the line below, we could get a value as low as -10 and as high as 9:
+
+        * `Random.Range(-10f, 10f);`
+
+### Lesson 7: Advanced VR Scripting 
+
+* `Waypoints`: let you teleport between areas in your `Scene`
+    * Check project code for full implementation
+
+* `Shader` is code to create a custom `Material` and run it on the GPU. Like the ocean `Shader` we can manipulate materials in real time.
+
+* Lesson Review
+
+    * One of the best ways of developing an application quickly is to reuse code. This lesson focused a lot on a couple of the scripts that was provided in the course and project assets.
+
+    * The goal of this lesson was not to teach you all the specifics of each script, but to get you comfortable looking at another’s code to see how you can use and adapt it to suit your needs.
+
+    * This will be a vital skill as you progress though your development career. Getting assets from the Unity asset store, for example, may require you to look at their documentation, if they have any, and experiment with what they’ve created. Not all assets are going to have tutorials provided, so you have to be willing to spend some time looking at examples, and experimenting to learn new skills.
+
+    * Udacity Teleportation Script Example
+
+        * In our experiment, we brought a prefab into the scene. This let us explore the components on the prefab to get a better idea of how it worked.
+
+        * The Waypoints prefab has a script on it called Navigation. Looking at the script, we can see some helpful comments that give us hints and explanations about how things work and what they do. This script is responsible for moving the camera
+
+        * It also has several child game objects which are individual waypoints. Each of those have a Waypoint script attached. The waypoint script has a variety of properties that affect the individual waypoint.
+
+    * Udacity Ocean Shader Example
+
+        * We learned that the Ocean shader is attached to a Scene Setup script which is attached to Scene gameobject. The ocean is dynamically generated at runtime, so when we aren’t in play mode, the ocean won’t show up.
+
+        * When we look at the Ocean shader, we can see all of the properties that we can change. We could opt to change values directly in the shader, but most shaders expose their most important properties publicly. We’re opting to change those in the inspector rather than editing the shader.
+
+    * Udacity Flocking Example
+
+        * In this example, we edited a script to suit our needs. We wanted to change the object that was flocking, so we edited a property. We got several errors in our console. By reading the error, we learned that we were missing a mesh renderer because there wasn’t one on our objects. We commented out the lines that mentioned mesh renderer, and running it again, worked.
