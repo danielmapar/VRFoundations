@@ -972,7 +972,9 @@
     
     * What other quality settings can I use to make my scenes look more polished?
 
-        * Go to Edit > Project Settings > Quality to see the Quality Settings. If we’re only interested in mobile for our project, we can delete most of the default settings (by clicking on the Trash can icon in the inspector) and leave only “Fastest”. Click on Fastest so we can edit some of the settings for this quality setting.
+        * ![quality-settings](./images/quality.PNG) 
+
+        * Go to `Edit > Project Settings > Quality` to see the Quality Settings. If we’re only interested in mobile for our project, we can delete most of the default settings (by clicking on the Trash can icon in the inspector) and leave only “Fastest”. Click on Fastest so we can edit some of the settings for this quality setting.
 
         * Set Pixel Light Count to 0
             * This setting tells Unity how many realtime lights it should consider for a single pixel. If we have no realtime lights in our scene, setting this to 0 is ideal.
@@ -1103,7 +1105,7 @@
                 
             }
         }
-    ```
+        ```
 
 * Lesson Review
 
@@ -1752,3 +1754,10 @@
     * Udacity Flocking Example
 
         * In this example, we edited a script to suit our needs. We wanted to change the object that was flocking, so we edited a property. We got several errors in our console. By reading the error, we learned that we were missing a mesh renderer because there wasn’t one on our objects. We commented out the lines that mentioned mesh renderer, and running it again, worked.
+
+### Final Project Notes
+
+* Making the UI Interactive
+    * During this step we will make the SignPost interactive by adding script and event trigger components to it. The process is almost identical to what we did with the Coin, Key, and Door in the previous step, but we **don't need a collider to interact with UI game objects**. Instead, we need to verify that the Canvas game object has a Graphic Raycaster component, and because we are using GVR, we will replace Unity's Graphic Raycaster with Google VR's GvrPointerGraphicRaycaster.
+        * Remove the Graphic Raycaster component that is automatically added when creating a new canvas game objects.
+            * You don't need to associate a collider with the UI object, the RayCaster will do the magic trick.
