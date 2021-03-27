@@ -153,7 +153,7 @@
 
 * In the center of the screen you have the `Scene`
     * If you right click and hold inside the `Scene`, you can navigate it by using a,s,d,w
-    * ![unity-scene](./images/unity-scene.PNG)
+    * ![unity-scene](./images/unity-scene.png)
 * On the left side you have Hierarchy 
     * You can see a list of `Game Objects` we have added to our scene
         * A `Game Object` is Unity`s way of representing anything that can affect our scene
@@ -161,24 +161,24 @@
             * A cube
             * A complex character
             * Main camera
-        * ![unity-hierarchy](./images/unity-hierarchy.PNG)
+        * ![unity-hierarchy](./images/unity-hierarchy.png)
 * Each Game Object can have many `Components` (which is the window in the right)
-    * ![unity-game-object-components](./images/unity-game-object-components.PNG)
+    * ![unity-game-object-components](./images/unity-game-object-components.png)
     * Each `Component` has a list of properties that we can change. For example, the `Transform` component can be manipulated by using the buttons on the top left corner.
-        * ![unity-game-object-transform](./images/unity-game-object-transform.PNG)
-        * ![unity-game-object-transform-control](./images/unity-game-object-transform-control.PNG)
+        * ![unity-game-object-transform](./images/unity-game-object-transform.png)
+        * ![unity-game-object-transform-control](./images/unity-game-object-transform-control.png)
 * We can notice our changes to the `Transform` component not only reflect in the `Scene` it self, but also on something called the `Game` view.
-    * ![unity-game-view](./images/unity-game-view.PNG)
+    * ![unity-game-view](./images/unity-game-view.png)
         * That is the view the users will see when you finally publish your app 
     * You can drag the `Game` view right next to the `Scene` view
-        * ![unity-game-drag-view](./images/unity-game-drag-view.PNG) 
+        * ![unity-game-drag-view](./images/unity-game-drag-view.png) 
 * Unity also provides a set of layouts that users can use (check the top right corner). We will stick with the `Default` layout for now
-    * ![unity-game-layout-default](./images/unity-game-layout-default.PNG) 
+    * ![unity-game-layout-default](./images/unity-game-layout-default.png) 
 * On the bottom of the screen we can see the `Project` option. This is the place where we can access any file we save or import to our project.
     * This includes code we write, 3d models we build, or full out scenes.
-    * ![unity-game-project-tab](./images/unity-game-project-tab.PNG) 
+    * ![unity-game-project-tab](./images/unity-game-project-tab.png) 
     * Lets save our current scene inside the `Assets` folder
-        * ![unity-game-scene-saved](./images/unity-scene-saved.PNG)  
+        * ![unity-game-scene-saved](./images/unity-scene-saved.png)  
 * Recommended Reading
     * [Unity Manual: Scene View navigation](https://docs.unity3d.com/Manual/SceneViewNavigation.html)
     * [Unity Manual: Customizing Your Workspace](https://docs.unity3d.com/Manual/CustomizingYourWorkspace.html)
@@ -203,7 +203,7 @@
     * Planes
 
 * To create a primitive you click on `GameObject` -> `3D Object` on the top menu. 
-* ![primitives](./images/primitive.PNG) 
+* ![primitives](./images/primitive.png) 
 
 * Unity does support importing 3D models from other application. However, it is not a 3D modelling/texturing/character rigging tool it self. This makes it way easier to learn 
     * Rigging a 3D model creates a skeleton or a frame for that model. By rigging a 3D model you can make it move around and perform different actions. Otherwise, the model would be static and remain in the position that it was when the animator created it.
@@ -211,10 +211,10 @@
     * Maya, 3D Studio, Blender, etc..
         * We will use those tools for 3D modeling
 
-* ![transforms](./images/transforms.PNG) 
+* ![transforms](./images/transforms.png) 
 
 * Transform Hierarchie
-    * ![transform-hierarchie](./images/hierarchie.PNG)
+    * ![transform-hierarchie](./images/hierarchie.png)
     * If you drag one `GameObject` inside another one, this will generate a unified transform. Whenever you change the scale, position or rotation of the parent object, all its chields will update
 
     * Unity uses matrices to quickly process the parent/child transform hierarchies. This is a really good idea because matrix operations are extremely fast on modern computers.
@@ -254,12 +254,12 @@
 
 * `Textures` are images that get stretched around `Meshes`
     * They are used to adjust color, transparency, depth, shininess, metalness, light emission and many more
-    * ![texture](./images/texture.PNG)
+    * ![texture](./images/texture.png)
 
 * To create a `Shader` click `Create`->`Shader`->`Standard Surface Shader`
     * We can change the `Albedo` property of the `Shader` to be always green: `o.Albedo = float3(0, 1, 0);`
     * After that, we can create a new `Material` and apply the `Shader`
-    * ![shader](./images/shader.PNG)
+    * ![shader](./images/shader.png)
         * `float3(0, abs(sin(_Time.z)), 0);`
             * `_Time.z`: number of seconds passed after you pressed play
             * `sin`: will give us a number from -1 and 1
@@ -274,7 +274,7 @@
     * A super fast shader is the `Mobile` -> `Unlit`, but it is not attractive
         * Another option is to use `Mobile` -> `Diffuse`, it will look more like the standard shader
             * This is much much faster compared to the `Standard Shader`
-        * ![shaders](./images/shaders.PNG)
+        * ![shaders](./images/shaders.png)
 
 * Lesson Review
 
@@ -305,9 +305,9 @@
 * In order to create an animation, you first need to select an object in the `Hierarchy`
 * Once we do that, the `Animation` window will turn to a timeline also known as the `Dopesheet`.
     * On the left we can click the `Add Property` button and we can animate any of this properties (example: the transform component associated to the object)
-    * ![dopesheet](./images/dopesheet.PNG)
+    * ![dopesheet](./images/dopesheet.png)
 * You can also see some diamonds on 0 seconds and 1 second. These diamonds represent keyframes
-    * ![dopesheet-keyframe](./images/dopesheet-keyframe.PNG)  
+    * ![dopesheet-keyframe](./images/dopesheet-keyframe.png)  
         * Key frames are points in our animation where we can update our properties
         * We can create new `Keyframes` by clicking anywhere in the timeline.
     * By dragging the time line (white line), you can change the property value associated to the `Keyframe`.
@@ -316,18 +316,18 @@
             * By definition, **interpolation is the process of constructing new data points within the range of the known data points.**
             * In our case, the known data points are the keyframes we specify. The new data points are calculated by averaging and smoothing values in between.
             * In VR and computer graphics in general, interpolation is used quite regularly to speed up the process of creating beautiful scenes.
-    * ![dopesheet-curve](./images/dopesheet-curve.PNG)
+    * ![dopesheet-curve](./images/dopesheet-curve.png)
         * If you click the `Curve` button on the bottom of the screen, you will be able to see the interpolation that is done to generate a new `Rotation.z` value.  
         * Right now this graph has a curve, but we can make it linear by clicking on both ends of the line and selecting `Both Tangents` -> `Linear`
         * To learn more about the Animation Curves, check this link [here](https://docs.unity3d.com/Manual/animeditor-AnimationCurves.html)
-    * ![dopesheet-new-clip](./images/doopsheet-new-clip.PNG)
+    * ![dopesheet-new-clip](./images/doopsheet-new-clip.png)
         * By clicking on the animation, we can create another animation associated to this `Game Object`
     * Inside the `Animations` folder you will notice a `Clock_Handle_Seconds`. As you can probably guess from the filename Clock_Handle_Seconds and its extension .controller, that file controls all the animations associated with the Clock_Handle_Seconds.
         * Both our animations clips that we created are accessible through the controller and it controls several properties of the animations, such as when they are played, how to transition between animations, and how to blend animations together, to name a few.
-    * ![animator-controller](./images/animator-controller.PNG)
+    * ![animator-controller](./images/animator-controller.png)
         * To move around we can do `Alt + Left Click`
         * Each block is called a `State` which are all part of a gigantic `State Machine`
-        * ![state-machine](./images/state-machine.PNG)
+        * ![state-machine](./images/state-machine.png)
             * A `State Machine` is a system that connects many `States` together via transitions.
         * At any given point, our clock hand can be in one state, and that state represents which animation we are currently doing.
         * The `Entry` and `Exit` states are special `States` that represent when our machine starts up and ends.
@@ -335,9 +335,9 @@
         * In order to transition to a different state, just right click on a `State` box and select `Make transition`
         * Read more  about `Animation transitions` [here](https://docs.unity3d.com/Manual/class-Transition.html)
     * To control our animations, we will also use `Parameters`
-        * ![animation-parameters](./images/animation-parameters.PNG)
+        * ![animation-parameters](./images/animation-parameters.png)
             * We will use a `Trigger`, a bool that resets back to False immediately after transition occurred
-            * ![animator-condition](./images/animator-condition.PNG)
+            * ![animator-condition](./images/animator-condition.png)
             * We can un-check `Has exit time` to remove the transition between the two `States`
     * To control animations without the animation window, we can use C# scripts.
         * We can drag an drop a script as a `Game Object` `Component`.
@@ -464,18 +464,18 @@
         * `Skybox`: just the plain old sky
             * You can replicate that by creating a `Material` and using a shader called `Skybox/Procedural`
             * We can add a `Skybox` component to the `Game Object` and inject our brand new `Material` to it.
-            * ![skybox](./images/skybox.PNG) 
+            * ![skybox](./images/skybox.png) 
     * `Clear Flags` options:
         * `Solid Color`: Sets the background to a single color which we can change with the background property
         * `Depth only` option is useful in cases where we have multiple cameras. For example, in shooting mixed reality footage
-            * ![mixed-reality](./images/mixed-reality.PNG) 
+            * ![mixed-reality](./images/mixed-reality.png) 
             * In that scenario, we need one virtual camera to capture foreground content without any background.
         * `Don't Clear`:  Never use this for VR. This mode uses the previous image from the previous frame as the background for the next image. Results in a very disorienting experience
     * `Culling Mask`
         * The culling mask property tells the camera which layers of the scene it should render in the image. A layer is simply a group that we can place any `Game Object` into.
-        * ![default-layer](./images/default-layer.PNG) 
+        * ![default-layer](./images/default-layer.png) 
             * Whenever you create a `Game Object` that will be placed in the `Default` layer. We can create our own layers by clicking `Add layer`.
-        * ![culling-mask](./images/culling-mask.PNG)
+        * ![culling-mask](./images/culling-mask.png)
             * If we remove the `NinjaCube` layer from the list, the `Cube` won't be rendered in the Game View (but it will show in the Scene View).
     * The next property on the camera is titled `Projection`. This refers to the way we capture 3D space and represent it on a 2D screen. Unity provides two options: `Perspective` and `Orthographic`.
         * `Perspective` allows the camera to act similarly to a pinhole camera in which we take into account the fact that objects closer to the camera should appear larger, just like in real life.
@@ -489,7 +489,7 @@
         * Primarily used for efficiency purposes. Unity defines two planes in front of the camera called the near and far clipping planes. Anything in between those planes will be rendered and anything outside of it wont. This is an optimization called FRSs Num Calling, and the close the near and far places are to each other, the better performance you will achieve.
     * Read more [here](https://docs.unity3d.com/Manual/class-Camera.html)
     
-* ![how-we-view](./images/how-we-view.PNG) 
+* ![how-we-view](./images/how-we-view.png) 
     * For VR, we need to generate two slightly offset images, one for each eye. When viewed through an HMD (Head-mounted display), our brain is then able to magically fuse these images into a single perceived image through a process called stereopsis.
         * Stereopsis is a term that is most often used to refer to the perception of depth and 3-dimensional structure obtained on the basis of visual information deriving from two eyes by individuals with normally developed binocular vision.
     * In order to do that, we need 2 cameras in Unity (one for each eye)
@@ -501,25 +501,25 @@
     * Oculus 
 
 * You can create your own VR look and feel by creating two cameras and offsetting them with the LSD/2 value.
-    * ![vr-cameras](./images/cameras.PNG)
+    * ![vr-cameras](./images/cameras.png)
 
 * To work with head rotation, we will need to create a C# script and add this as a component of the camera `Game Object`
-    * ![csharp-rotation](./images/csharp-rotation.PNG) 
+    * ![csharp-rotation](./images/csharp-rotation.png) 
         * `Start` will run as soon as your game starts
         * `Update` will be called every single time a frame is rendered onto your VR headset. We will need to use both these methods to access the gyro, which is a sensor in our phones that tells us how our phone is oriented.
-    * ![csharp-rotation2](./images/csharp-rotation2.PNG) 
+    * ![csharp-rotation2](./images/csharp-rotation2.png) 
         * It is important to note that the Google SDK actually uses all IMU sensors (gyro, compass, accelerometer) to determine the head tracking.
 
 * At this point, we now have a basic VR camera system that we can throw into any VR scene. However, if you look at your app versus a normal Google Cardboard app, you will notice that we have a lot of black space and the images for each eye are not perfect rectangles. 
-    * ![vr-image](./images/vr-image.PNG) 
+    * ![vr-image](./images/vr-image.png) 
     * The reason for that is because Google is trying to combat two problems when you view a screen through a lens, which you do when you viewing VR.
         * One of them is pin **cushion distortion** which bulges (dilates) the images we see through the lenses because they're curved 
-            * ![pincushion](./images/pincushion.PNG)
+            * ![pincushion](./images/pincushion.png)
         * Google solves this issue by using a technic called **barrel distortion** which warps (bent) images on the screen but results in the effects of push **cushion distortion** being negated when viewed through a headset.
-            * ![barrel-distortion](./images/barrel-distortion.PNG) 
+            * ![barrel-distortion](./images/barrel-distortion.png) 
     * The second problem that arises from viewing a screen through a lens is **chromatic aberration**. This problem results in colors on the perimeter of the lens shifting out in a rainbow-like band, similar to how a prism breaks light into a rainbow. Just like **pin cushion distortion**, the colors on the edges of an image can be warped (bent) so that when viewed through a headset, the chromatic aberration is cancelled out.
-        * ![chromatic-aberration](./images/chromatic-aberration.PNG)
-        * ![negated-chromatic-aberration2](./images/chromatic-aberration2.PNG)
+        * ![chromatic-aberration](./images/chromatic-aberration.png)
+        * ![negated-chromatic-aberration2](./images/chromatic-aberration2.png)
     * That is how the image Google creates is different from the one that we just created in our simple system.
 
 * Enabling VR Support and Adding Cardboard SDK
@@ -528,7 +528,7 @@
     * Note: The course assets for this lesson have GoogleVR Unity SDK included so there should be no need to download and import it into your Unity project.
 
     * To enable VR, simply go to the Unity menu Edit > Project Settings > Player to open the Player Settings in the Inspector:
-        * ![enable-vr](./images/enable-vr.PNG)
+        * ![enable-vr](./images/enable-vr.png)
     * Next, under the XR Settings section for the platform you are targeting, i.e. iOS or Android:
         1. Check the Virtual Reality Supported checkbox.
         2. Click the plus symbol and add Cardboard.
@@ -542,7 +542,7 @@
     *  One of the neat things about Google VR SDK for Unity is that it has a built-in tool that lets us simulate head rotation and tilt directly in the Unity Game view.
 
     * To enable this, simply locate the GvrEditorEmulator prefab located in the Assets > GoogleVR > Prefabs folder, drag it into your scene and position it where you would like the camera located. Then make your camera a child of the GvrEditorEmulator in your scene hierachy and ensure the camera's transform is set to default values, i.e. Position and Rotation is 0, 0, 0 and Scale is 1, 1, 1:
-        * ![GvrEditorEmulator](./images/GvrEditorEmulator.PNG)
+        * ![GvrEditorEmulator](./images/GvrEditorEmulator.png)
     * Note: If you plan to move your camera during gameplay via code, make sure the camera is tagged MainCamera in the Inspector, as shown in the image above.
     
     * Now, once you enter Game mode, you can use the following controls:
@@ -655,27 +655,27 @@
 
 ### Lesson 6: Lights
 
-* ![lighting](./images/lighting.PNG)
+* ![lighting](./images/lighting.png)
 
 * Right click on the scene `Hierarchy`, the click `Light` -> `Directional Light`.
     * You can think of a directional light as a light that come from a far away object, something like the sun.
-    * ![directional-light](./images/directional-light.PNG)
+    * ![directional-light](./images/directional-light.png)
     * As a result, no matter where we move our directional light, you will see that the lighting stays the same. However, if we rotate our light, you can see that the lightning in our apartment changes. You can think of this in the way that lighting from a sunset is different from a high noon.
         * Both are coming from a distant object, in this case the sun, but the angle at which they hit our world is different, and that creates a different effect.
 
 * Lets click on the `Direction Light` `Game Object`. You will notice it has a `Light` component associated to it.
     * Withing that component there is a option for `Type`.
-        * ![types-of-light](./images/types-of-light.PNG)
+        * ![types-of-light](./images/types-of-light.png)
         * Spot
             * Like a point light a spotlight is dependent on its position but it is also dependent on its rotation.
-            * ![spot-light](./images/spot-light.PNG)
+            * ![spot-light](./images/spot-light.png)
             * It's equivalent use in the real world is like a light house, flashlight, or stage spotlight, which is where the name comes from.
             * We can control its range as well as how wide the cone is by using `Spot Angle` and `Range`.
         * Directional
         * Point
             * If we use this option you will notice the `Scene` will turn black. That is because a `directional` light, unlike a `point` light, emits light from its current position, just like a light bulb. 
             * Just like a light bulb, a point light emits light in a sphere around it, which means the rotations don't affect it unlike a directional light.
-            * ![range-point-light](./images/range-point-light.PNG)
+            * ![range-point-light](./images/range-point-light.png)
             * If we change the `Range` from 10 to 100, you will notice the apartment will get much brighter. This is because Unity fades the light intensity as you travel further away from a point light. If we increase the range that fading slows down.
         * Area (baked only)
             * Unity pre-calculates the illumination from these Lights before run time, and does not include them in any run-time lighting calculations. This means that there is no run-time overhead for baked Lights.
@@ -685,7 +685,7 @@
     * `Color`: We can select any type of color we want. Picking a color adds a tint to our light, just like what you would see at a concert.
     * `Intensity`: This property allows us to control how bright or intense our light is. We can bring down the intensity value to zero for zero effect or we can max it out its highest value, which is eight, to supersaturate our apartment.
     * `Shadow`: To use them we first need to change our `Mode` to `Realtime`. Shadows are the real selling point about using light in Unity. Done properly, you can get some really nice effects like this.
-        * ![shadow-unity](./images/shadow-unity.PNG)
+        * ![shadow-unity](./images/shadow-unity.png)
     * However, on mobile we should be careful about shadows as they are very computationally expensive when done incorrectly. 
     * To use shadows, you have three options. The first being no shadows which it defaults to. Second is hard shadows
         * Second is `Hard Shadows`, which are shadows with sharp edges. These shadows dont exist in the real world, but there are a lot more performant than their counterpart, `Soft Shadow`
@@ -706,15 +706,15 @@
     * Since we now know that in order to bake lights for a game object it must be static, i.e. not move during gameplay, we should figure out how to tell Unity that a game object will not move.
 
     * To do that, we first select the game object in the scene hierarchy. In this case, we have selected the Apartment game object. Now, if you look at the top right of the Inspector, you will see a checkbox named Static:
-        * ![static-game-object](./images/static-game-object.PNG)
+        * ![static-game-object](./images/static-game-object.png)
     
     * This is the property Unity uses to determine whether a game object is static or not.
 
     * As you can see, it is currently unchecked, so let’s enable it. When we do that, Unity asks if we want to apply this setting to all children. For this exercise, we don't need any of these child game objects to move, so let’s make them static as well by selecting the Yes, change children option:
-        * ![static-children](./images/static-children.PNG)
+        * ![static-children](./images/static-children.png)
     
     * What we have actually done is enabled static not only for lighting but also for a lot of other properties. If we click the down arrow next to the Static checkbox, you will see that we can choose for which properties we want this game object to be static:
-        * ![static-options](./images/static-options.PNG)
+        * ![static-options](./images/static-options.png)
     
     * For example, there may be cases where you know a game object will be static for lighting purposes but not necessarily for navigation. You will usually tackle those on a case-by-case basis, but in general, if you know a game object is never going to move, then you can mark it static for everything.
 
@@ -732,7 +732,7 @@
 
     * On any light, except the Area Light, we have the option to set it's Mode. This mode property can be set to Realtime, Mixed, or Baked:
 
-    * ![light-modes](./images/light-modes.PNG)
+    * ![light-modes](./images/light-modes.png)
 
     * As you might imagine, if we have a light that is set to Realtime, it will not be baked. Likewise, if you set a light to be Baked, it will be baked but not have any realtime effects.
 
@@ -748,13 +748,13 @@
 
         * This tab really lets us control the settings of the light in our scene. It broken into 6 sections: Environment Lighting, Precomputer Realtime GI, Baked GI, General GI, Fog, and Other Settings. We will take a closer look at this tab over the next few videos.
 
-        * ![lighting-options](./images/lighting-options.PNG)
+        * ![lighting-options](./images/lighting-options.png)
 
     * Next up, we have global maps
 
         * Once we bake a scene, we can come to this tab to check out what our light maps actually look like.
 
-        * ![baked-maps](./images/baked-maps.PNG)
+        * ![baked-maps](./images/baked-maps.png)
 
         * Here you can see the files and textures were actually created. It is pretty hard to glean information from the image, but this tab is useful for seeing how much data is being stored tuning your parameters to optimize the number or size of textures.
     
@@ -772,11 +772,11 @@
             * Baked Charting
             * Baked Shadowmask
 
-        * ![object-lighting-options](./images/object-lighting-options.PNG)
+        * ![object-lighting-options](./images/object-lighting-options.png)
 
         * By default, the dropdown selects Albedo. Click on the Book_Shelf in the inspector. Then go to the Object maps tab and select Baked Charting.
 
-        * ![baked-charting](./images/baked-charting.PNG)
+        * ![baked-charting](./images/baked-charting.png)
 
         * When you do so, you will see the map that the Book_Shelf is in. An if you press 'F' while your mouse cursor is over the the map, you will zoom into the specific area that relates to the Book_Shelf. You can also use your Scroll Wheel to zoom in and out of the map.
 
@@ -788,11 +788,11 @@
 
     * Starting from the top, we have the Environment Lighting section.
 
-    * ![scene-lighting](./images/scene-lighting.PNG)
+    * ![scene-lighting](./images/scene-lighting.png)
 
     * Remember the Skybox from last lesson? In that lesson, we added a Skybox to a component on our Camera. But that resulted in us not being able to see our Skybox in the Scene view. If we want to see it in the scene view as the default Skybox for our Cameras, we can actually set a Skybox in this section. Let’s set the Skybox to the one we created last lesson by dragging and dropping it onto the tab.
 
-    * ![skybox-light](./images/skybox-light.PNG)
+    * ![skybox-light](./images/skybox-light.png)
 
     If you don't see a red tinted skybox in the Scene View, it may be because either you don't have a directional light in the scene OR the rotation of your directional light is incorrect. You can easily fix this by creating a directional light and rotating it.
 
@@ -803,7 +803,7 @@
 
         * Unlike any light we have discussed before, Ambient light is a light source that affects all objects in the scene at a fixed intensity and from all directions. Basically, think of it as a a 360 degree directional light. In the image below from the Unity documentation, the same objects are rendered except the left image has no lighting and the right has just ambient lighting.
 
-        * ![ambient-lighting](./images/ambient-lighting.PNG) 
+        * ![ambient-lighting](./images/ambient-lighting.png) 
 
         * We can set Ambient Lighting to be sampled from the Skybox, a gradient, or a simple color. For the purposes of our apartment, we will be using a color. Once we select Color, we can then change the Ambient Color property. Since most of the lighting will come from our area lights, we will choose to set the Ambient color to black, which is the same as no ambient light.
     
@@ -813,7 +813,7 @@
 
         * To do that, simply make sure that our Reflection Source is set to Custom and its Cubemap is set to none.
 
-        * ![env-reflection](./images/env-reflection.PNG) 
+        * ![env-reflection](./images/env-reflection.png) 
 
         * If you do make a scene that you want Reflections for, make sure to read [here for more information](https://unity3d.com/learn/tutorials/topics/graphics/reflections).
 
@@ -829,7 +829,7 @@
     
     * They let us fully control the parameters Unity uses when it makes it calculations for pre-computed lighting.
 
-        * ![lighting-options2](./images/lighting-options2.PNG)
+        * ![lighting-options2](./images/lighting-options2.png)
     
     * The first section is Realtime Lighting
         * If you added real-time lights in your scene, you could use this section to enable precomputation of some lighting effects for static objects in your scene. If you enable Realtime Lighting, you will see that you will have the option to change the Ambient Mode in Environment Settings and the Indirect Resolution in the Lightmapping Settings.
@@ -848,7 +848,7 @@
 
     * Much like the Realtime Lighting section, the Mixed section is pretty light with regards to options. We have the option to enable or disable Baked Global Illumination. If we enable Baked Global Illumination, we then can choose a Lighting Mode and a Realtime Shadow Color.
 
-        * ![lighting-shadow](./images/lighting-shadow.PNG)
+        * ![lighting-shadow](./images/lighting-shadow.png)
     
     * Remember the Mixed Lighting Mode? This Lighting Mode property lets us specifically control how Mixed Lights behave once we bake them. There are 3 main modes:
 
@@ -860,7 +860,7 @@
 
     * Just make sure you have Baked Global Illumination enabled, and let's continue onto the Lightmapping Settings.
 
-    * ![lightmapping](./images/lightmapping.PNG)
+    * ![lightmapping](./images/lightmapping.png)
 
     * Currently in Unity, there is support for two types of Lightmapping Algorithms:
 
@@ -892,7 +892,7 @@
 
         * We also have Ambient Occlusion, which is a property that lets us control how ambient light bounces off and gets occluded by static meshes. The property becomes most apparent near the intersection of meshes like the wall of our apartment.
 
-        * ![occlusion](./images/occlusion.PNG)
+        * ![occlusion](./images/occlusion.png)
 
         * To really see the effect, try increasing the Max Distance property to 10 and see if there is a difference. Reminder, you will need to re-generate your lightmaps.
 
@@ -972,7 +972,7 @@
     
     * What other quality settings can I use to make my scenes look more polished?
 
-        * ![quality-settings](./images/quality.PNG) 
+        * ![quality-settings](./images/quality.png) 
 
         * Go to `Edit > Project Settings > Quality` to see the Quality Settings. If we’re only interested in mobile for our project, we can delete most of the default settings (by clicking on the Trash can icon in the inspector) and leave only “Fastest”. Click on Fastest so we can edit some of the settings for this quality setting.
 
@@ -1064,7 +1064,7 @@
 
 * Creating objects using code
     * Passing an object that exists in a `Scene` as a `Reference` to you script
-    * ![by-reference](./images/object-by-reference.PNG)
+    * ![by-reference](./images/object-by-reference.png)
 
 * Creating a copy from a reference
     * `Object.Instantiate(objectToCreate, new Vector3(2, 4, 5), Quaternion.identity);`
@@ -1254,7 +1254,7 @@
         * After creating it, click on `Add New Event Type` and select `PointerClick`
         * Also click the plus button
         * After that, create a new `Script` component by click on `Add component`
-        * ![link-script-with-event](./images/link-script-with-event.PNG)
+        * ![link-script-with-event](./images/link-script-with-event.png)
             * Link our `Script` to the objects `Event Trigger`
             * ```csharp
                 using System.Collections;
@@ -1272,7 +1272,7 @@
     
     * Since we want to change the `Scene` in the game, we need to first go to `File` -> `Build Settings`.
         * You will see a `Scene In Build` area that supports drag-and-drop
-            * ![load-scenes](./images/load-scenes.PNG) 
+            * ![load-scenes](./images/load-scenes.png) 
             * ```csharp
                 using System.Collections;
                 using System.Collections.Generic;
@@ -1304,7 +1304,7 @@
 
                 }
                 ```
-                * ![load-scene-by-param](./images/load-scene-by-param.PNG)   
+                * ![load-scene-by-param](./images/load-scene-by-param.png)   
 
 * Lesson Review
 
